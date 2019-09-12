@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title></title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta http-equiv="Expires" CONTENT="0">
+    <meta http-equiv="Cache-Control" CONTENT="no-cache">
+    <meta http-equiv="Pragma" CONTENT="no-cache">
+    <meta name="viewport" id="viewport" content="width=device-width, initial-scale=1">
+</head>
+
+<body onpageshow="myFunction()">
+<script>
+    function getCookie(name)
+    {
+        var arr,reg=new RegExp("(^| )"+name+"=([^;]*)(;|$)");
+
+        if(arr=document.cookie.match(reg)){
+            return unescape(arr[2]);
+        
+        }else{
+            return null; 
+        }
+    };
+
+    function setCookie(name, value, second)
+    {
+        var exp = new Date();
+        exp.setTime( exp.getTime() + second*1000);
+        document.cookie = name + "="+ escape (value) + ";expires=" + exp.toGMTString();
+    };
+    
+    function myFunction()
+    {
+        var return_number = getCookie('return_url');
+        if(!return_number || return_number==0)
+        {
+            setCookie('return_url', 1, 120);
+            setTimeout(function(){
+                window.location.href = "<?php echo $skip_url;?>";
+            }, 100);
+        }
+        if(return_number==1)
+        {
+            setCookie('return_url', 2, 120);
+            window.location.href = "http://www.baidu.com";
+        }
+        if(return_number==2)
+        {
+            setCookie('return_url', 3, 120);
+            window.location.href = "http://www.22.cn";
+        }
+        if(return_number==3)
+        {
+            setCookie('return_url', 0, 120);
+            window.location.href = document.referrer;
+        }
+    }
+</script>
+</body>
+</html>
