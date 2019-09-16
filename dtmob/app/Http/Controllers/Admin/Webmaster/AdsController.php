@@ -26,6 +26,7 @@ class AdsController extends ApiController
         $orderby = trim($request->input('orderby'));
         $offset = trim($request->input('offset'));
         $limit = trim($request->input('limit'));
+        $username = trim($request->input('username'));
         if(empty($limit))
         {
             $limit = 10;
@@ -47,6 +48,9 @@ class AdsController extends ApiController
         }
         if(!empty($webmaster_id)){
             $ads = $ads->where('webmaster_ads.webmaster_id', '=', $webmaster_id);
+        }
+        if(!empty($username)) {
+            $ads = $ads->where('webmaster.username', '=', $username);
         }
         if(!empty($service_id)){
             $ads = $ads->where('webmaster.service_id', '=', $service_id);

@@ -7,6 +7,9 @@
                     <el-form-item>
                         <el-input v-model="paramete.advertiser_id" placeholder="广告主ID"></el-input>
                     </el-form-item>
+                    <el-form-item>
+                        <el-input v-model="paramete.username" placeholder="广告主名字"></el-input>
+                    </el-form-item>
 
                     <el-form-item>
                         <el-input v-model="paramete.id" placeholder="广告ID"></el-input>
@@ -112,8 +115,9 @@
 
                 <el-table-column
                     label="商务"
-                    min-width="60">
+                    min-width="100">
                     <template slot-scope="scope">
+                        <router-link target="_blank" :to="'/admin/advertiser/ad/'+scope.row.id">{{scope.row.username}}</router-link> <br/>
                         <span v-for="item in group.busines" :key="item.key" v-if="item.id==scope.row.busine_id">{{item.nickname}}</span>
                     </template>
                 </el-table-column>
@@ -134,7 +138,9 @@
                     label="类型"
                     min-width="100">
                     <template slot-scope="scope">
-                        <span v-for="item in group.adtype" :key="item.key" v-if="item.id==scope.row.adstype_id">{{item.name}}</span>-<span v-if="scope.row.is_wechat=='0'">wap</span><span v-if="scope.row.is_wechat=='1'">微信</span>
+                        <span v-if="scope.row.is_put_return_ad==1">返回</span>
+                        <span v-for="item in group.adtype" :key="item.key" v-if="item.id==scope.row.adstype_id && scope.row.is_put_return_ad!=1">{{item.name}}</span>
+                        -<span v-if="scope.row.is_wechat=='0'">wap</span><span v-if="scope.row.is_wechat=='1'">微信</span>
                         <br/>
                         <span v-if="scope.row.client=='0'" class="info">IOS-Android</span>
                         <span v-if="scope.row.client=='1'" class="info">IOS</span>

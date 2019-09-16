@@ -26,6 +26,7 @@ class AdController extends ApiController
         $client = trim($request->input('client'));
         $state = trim($request->input('state'));
         $id = trim($request->input('id'));
+        $username = trim($request->input('username'));
 
         $offset = trim($request->input('offset'));
         $limit = trim($request->input('limit'));
@@ -74,6 +75,9 @@ class AdController extends ApiController
         if(!empty($id))
         {
             $ads = $ads->where('advertiser_ads.id', '=', $id);
+        }
+        if(!empty($username)) {
+            $ads = $ads->where('adv.username', '=', $username);
         }
 
         $count = $ads->count();

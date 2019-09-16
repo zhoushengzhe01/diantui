@@ -38,6 +38,9 @@
                         <el-input v-model="paramete.webmaster_id" placeholder="站长ID"></el-input>
                     </el-form-item>
                     <el-form-item>
+                        <el-input v-model="paramete.username" placeholder="站长名字"></el-input>
+                    </el-form-item>
+                    <el-form-item>
                         <el-select v-model="paramete.position_id" placeholder="广告类型">
                             <el-option label="选择全部" value=""></el-option>
                             <el-option v-for="item in group.adtype" :key="item.key" :label="item.name" :value="item.id"></el-option>
