@@ -237,27 +237,19 @@ class StatisController extends Controller
             #处理安全跳转
             $time = time();
             $secretkey = md5(md5($time.'&dtmob@123'));
-
-          
+            
+            $string =  Helper::encode([urlencode($link), $data['is_wechat_cover'], $time, $secretkey]);
             if(self::$client['system']=='Android')
             {
-                $domain = "http://and.byqxx.cn";
+                $domain = "http://and.361yb.cn:8090";
+                $link = $domain."/weixin?string=" . $string;
             }
             else
             {
-                $domain = "http://ios.byqxx.cn";
+                #$domain = "http://ios.faqigold.cn";
+                #$link = $domain."/weixin?string=" . $string;
             }
 
-            // if(self::$client['ip']=='103.5.62.130')
-            // {
-                $string =  Helper::encode([urlencode($link), $data['is_wechat_cover'], $time, $secretkey]);
-
-                $link = $domain."/weixin?string=" . $string;
-            // }
-            // else
-            // {
-            //     $link = $domain."/weixin?url=" . urlencode($link) . "&is_cover=" . $data['is_wechat_cover'] . "&time=" . $time . "&secretkey=" . $secretkey;
-            // }
         }
         
         $advertiser_ad_id = $data['advertiser_ad_id'];
