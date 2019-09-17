@@ -333,8 +333,7 @@
                     </div>
                     <el-col :span="12">
                         <el-form-item label="强制跳转">
-                            <el-input v-model="data.webmasterad.compel_skip" v-if="group.user.department_id!=3"><template slot="append">%</template></el-input>
-                            <el-input v-model="data.webmasterad.compel_skip" v-if="group.user.department_id==3" disabled><template slot="append">%</template></el-input>
+                            <el-input v-model="data.webmasterad.compel_skip"><template slot="append">%</template></el-input>
                         </el-form-item>
                     </el-col>
                     <el-col :span="24">

@@ -50,7 +50,7 @@ class AdsController extends ApiController
             $ads = $ads->where('webmaster_ads.webmaster_id', '=', $webmaster_id);
         }
         if(!empty($username)) {
-            $ads = $ads->where('webmaster.username', '=', $username);
+            $ads = $ads->where('webmaster.username', 'like', '%'.$username.'%');
         }
         if(!empty($service_id)){
             $ads = $ads->where('webmaster.service_id', '=', $service_id);

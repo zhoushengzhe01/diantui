@@ -77,7 +77,7 @@ class AdController extends ApiController
             $ads = $ads->where('advertiser_ads.id', '=', $id);
         }
         if(!empty($username)) {
-            $ads = $ads->where('adv.username', '=', $username);
+            $ads = $ads->where('adv.username', 'like', '%'.$username.'%');
         }
 
         $count = $ads->count();
