@@ -425,6 +425,7 @@ class AdController extends ApiController
             return response()->json([], 500);
         }
         $file = $request->file('file');
+        $data = ['status' => 200,'message' => 'success'];
         if ($file->isValid()) {
             // 获取文件相关信息
             $originalName = $file->getClientOriginalName(); // 文件原名
@@ -440,12 +441,14 @@ class AdController extends ApiController
             // 使用我们新建的upload_company_img本地存储空间（目录）
             //这里的upload_company_img是配置文件的名称
             $bool = \Storage::disk('upload_advertiser_img')->put($filename, file_get_contents($realPath));
-            return response()->json([
-                'status_code' => 200,
-                'message' => 'success'
-            ]);
-
+            if(!$bool) {
+                $data['status'] = 300;
+                $data['message'] = 'fail';
+            }
+        }else {
+            $data['status'] = 0;
+            $data['message'] = 'isValid is null';
         }
-
+        return response()->json($data);
     }
 }

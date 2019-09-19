@@ -141,7 +141,7 @@
                                 class="upload-demo"
                                 :action="uploadAction"
                                 :before-upload="beforeAvatarUpload"
-                                :on-preview="handlePreview"
+                                :on-success="handleAvatarSuccess"
                                 :limit="1"
                                 :file-list="fileList"
                                 list-type="picture">
@@ -448,18 +448,25 @@ export default {
                 }, function(type, message){ Th.loading = false;  Th.$emit('message', type, message); });
             }
         },
-      beforeAvatarUpload(file) {      
-        const isPNG = file.type === 'image/png';
-        const isSize = file.size  / 1024 < 200;  
-        if (!isPNG) {
-          this.$message.error('只能上传图片png格式!');
-            return isPNG;
-        }
-        if (!isSize) {
-          this.$message.error('上传图片大小不能超过 200kb!');
-            return isSize;
-        }
-      },
+        beforeAvatarUpload(file) {      
+            const isPNG = file.type === 'image/png';
+            const isSize = file.size  / 1024 < 200;  
+            if (!isPNG) {
+                this.$message.error('只能上传图片png格式!');
+                return isPNG;
+            }
+            if (!isSize) {
+                this.$message.error('上传图片大小不能超过 200kb!');
+                return isSize;
+            }
+        },  
+        handleAvatarSuccess(response, file, fileList) {
+            if(response.status == 200) {                
+                this.$message.success('上传成功!');
+            }else  {
+                this.$message.error('上传失败!');
+            }
+        }  
     },
 }
 </script>
