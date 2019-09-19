@@ -229,12 +229,13 @@ Route::group(['prefix' => 'admin', 'namespace' => 'Admin'], function (){
         Route::get('advertisers.json', 'Advertiser\AdvertiserController@getAdvertisers');
         Route::get('advertiser/{id}.json', 'Advertiser\AdvertiserController@getAdvertiser')->where('id', '[0-9]+');
         Route::put('advertiser/{id}.json', 'Advertiser\AdvertiserController@putAdvertiser')->where('id', '[0-9]+');
-        Route::get('advertiser/loginlogs.json', 'Advertiser\AdvertiserController@getLoginlogs');
+        Route::get('advertiser/loginlogs.json', 'Advertiser\AdvertiserController@getLoginlogs');     
         //广告
         Route::get('advertiser/ads.json', 'Advertiser\AdController@getAds');
         Route::get('advertiser/ad/{id}.json', 'Advertiser\AdController@getAd')->where('id', '[0-9]+');
         Route::put('advertiser/ad/{id}.json', 'Advertiser\AdController@putAd')->where('id', '[0-9]+');
-        Route::post('advertiser/ad.json', 'Advertiser\AdController@postAd');
+        Route::post('advertiser/ad.json', 'Advertiser\AdController@postAd');      
+        Route::post('advertiser/uploadImg/{id}.json', 'Advertiser\AdController@uploadImg')->where('id', '[0-9]+');
         //广告数量
         Route::get('advertiser/ad/number.json', 'Advertiser\AdController@getAdnumber');
         

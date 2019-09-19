@@ -134,10 +134,24 @@
                                 </el-form-item>
                             </el-col>
                         </el-row>
-                        </el-collapse-transition>
+                        </el-collapse-transition>                      
+                        <el-col :span="24">
+                            <el-form-item v-if="data.ad.is_wechat=='1' && data.ad.is_wechat_out_skip=='1' && data.ad.is_wechat_cover=='1'"   label="上传图片">
+                                <el-upload
+                                class="upload-demo"
+                                :action="uploadAction"
+                                :before-upload="beforeAvatarUpload"
+                                :on-preview="handlePreview"
+                                :limit="1"
+                                :file-list="fileList"
+                                list-type="picture">
+                                <el-button size="small" type="primary">点击上传</el-button>
+                                <span class="demo-instructions">只能上传png格式图片</span>
+                                </el-upload>                        
+                            </el-form-item>
+                        </el-col>
                     </el-col>
                 </el-row>
-
 
                 <!--站长设置-->
                 <el-row class="box-item">
@@ -310,6 +324,8 @@ export default {
 
                 }
             },
+            fileList: [],
+            uploadAction: '',
         };
     },
     created: function () {
@@ -319,6 +335,7 @@ export default {
         if(this.id)
         {
             this.getAd();
+            this.uploadAction = '/admin/advertiser/uploadImg/'+this.id+'.json';
         }
         else
         {
@@ -358,6 +375,9 @@ export default {
                 Th.loading = false;
 
                 Th.getPackages();
+                
+                Th.fileList = [{name:'当前图片',url:'/images/'+Th.id+'.png'}];
+                
 
             }, function(type, message){ Th.loading = false; Th.$emit('message', type, message); });
         },
@@ -428,6 +448,18 @@ export default {
                 }, function(type, message){ Th.loading = false;  Th.$emit('message', type, message); });
             }
         },
+      beforeAvatarUpload(file) {      
+        const isPNG = file.type === 'image/png';
+        const isSize = file.size  / 1024 < 200;  
+        if (!isPNG) {
+          this.$message.error('只能上传图片png格式!');
+            return isPNG;
+        }
+        if (!isSize) {
+          this.$message.error('上传图片大小不能超过 200kb!');
+            return isSize;
+        }
+      },
     },
 }
 </script>

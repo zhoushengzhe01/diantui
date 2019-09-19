@@ -117,7 +117,7 @@
                     label="商务"
                     min-width="100">
                     <template slot-scope="scope">
-                        <router-link target="_blank" :to="'/admin/advertiser/ad/'+scope.row.id">{{scope.row.username}}</router-link> <br/>
+                        <router-link target="_blank" :to="'/admin/advertiser/ad/'+scope.row.advertiser_id">{{scope.row.username}}</router-link> <br/>
                         <span v-for="item in group.busines" :key="item.key" v-if="item.id==scope.row.busine_id">{{item.nickname}}</span>
                     </template>
                 </el-table-column>

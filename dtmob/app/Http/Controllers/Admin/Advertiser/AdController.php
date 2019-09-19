@@ -419,4 +419,33 @@ class AdController extends ApiController
 
         return response()->json(['data'=>$type], 200);
     }
+
+    public function uploadImg(Request $request, $id) {      
+        if (!$request->hasFile('file')) {
+            return response()->json([], 500);
+        }
+        $file = $request->file('file');
+        if ($file->isValid()) {
+            // 获取文件相关信息
+            $originalName = $file->getClientOriginalName(); // 文件原名
+            $ext = $file->getClientOriginalExtension();     // 扩展名
+            $realPath = $file->getRealPath();   //临时文件的绝对路径
+            $type = $file->getClientMimeType();     // image/jpeg
+
+            // 上传文件
+            $filename = $id;
+            // 使用我们新建的uploads本地存储空间（目录）
+
+            $filename = $filename . '.' . $ext;
+            // 使用我们新建的upload_company_img本地存储空间（目录）
+            //这里的upload_company_img是配置文件的名称
+            $bool = \Storage::disk('upload_advertiser_img')->put($filename, file_get_contents($realPath));
+            return response()->json([
+                'status_code' => 200,
+                'message' => 'success'
+            ]);
+
+        }
+
+    }
 }
