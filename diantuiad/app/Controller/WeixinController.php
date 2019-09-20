@@ -25,6 +25,7 @@ class WeixinController
             $is_cover = $date[1];
             $time = $date[2];
             $secretkey = $date[3];
+            $advertiser_ad_id = $date[4];
 
             #限时访问
             if(time() > ($time+120))
