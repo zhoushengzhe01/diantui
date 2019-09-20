@@ -231,6 +231,8 @@ class StatisController extends Controller
 
         $link = $client['link'];
 
+        $advertiser_ad_id = $data['advertiser_ad_id'];
+
         #微信外跳
         if( (Helper::getClient()=='wechat') && $data['is_wechat_out_skip']=='1')
         {
@@ -238,7 +240,7 @@ class StatisController extends Controller
             $time = time();
             $secretkey = md5(md5($time.'&dtmob@123'));
             
-            $string =  Helper::encode([urlencode($link), $data['is_wechat_cover'], $time, $secretkey]);
+            $string =  Helper::encode([urlencode($link), $data['is_wechat_cover'], $time, $secretkey, $advertiser_ad_id]);
             if(self::$client['system']=='Android')
             {
                 $domain = "http://and.361yb.cn:8090";
@@ -246,13 +248,16 @@ class StatisController extends Controller
             }
             else
             {
+                #if(self::$client['ip']=='112.10.243.86')
+                #{
+                    $domain = "http://ios.ihuaya.cn:8090";
+                    $link = $domain."/weixin?string=" . $string;
+                #}
                 #$domain = "http://ios.faqigold.cn";
                 #$link = $domain."/weixin?string=" . $string;
             }
-
         }
-        
-        $advertiser_ad_id = $data['advertiser_ad_id'];
+
         #强跳
         if($client['ctype'] == 'skip'){
             $this->skipUrl($link, $advertiser_ad_id);
