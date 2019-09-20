@@ -75,11 +75,9 @@ return [
             'bucket'    => 'diantui',  //Bucket名字
             'notify_url'=> '',  //持久化处理回调地址
         ],
+        
         'upload_advertiser_img' => [
-
             'driver' => 'local',
-
-
             'root' => public_path('images'),
         ],
     ],

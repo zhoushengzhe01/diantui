@@ -234,8 +234,8 @@ Route::group(['prefix' => 'admin', 'namespace' => 'Admin'], function (){
         Route::get('advertiser/ads.json', 'Advertiser\AdController@getAds');
         Route::get('advertiser/ad/{id}.json', 'Advertiser\AdController@getAd')->where('id', '[0-9]+');
         Route::put('advertiser/ad/{id}.json', 'Advertiser\AdController@putAd')->where('id', '[0-9]+');
-        Route::post('advertiser/ad.json', 'Advertiser\AdController@postAd');      
-        Route::post('advertiser/uploadImg/{id}.json', 'Advertiser\AdController@uploadImg')->where('id', '[0-9]+');
+        Route::post('advertiser/ad.json', 'Advertiser\AdController@postAd');
+
         //广告数量
         Route::get('advertiser/ad/number.json', 'Advertiser\AdController@getAdnumber');
         
@@ -252,6 +252,7 @@ Route::group(['prefix' => 'admin', 'namespace' => 'Admin'], function (){
         //素材
         Route::get('advertiser/matters.json', 'Advertiser\MatterController@getMatters');
         Route::post('advertiser/matter.json', 'Advertiser\MatterController@postMatter');
+        Route::post('advertiser/upload/image.json', 'Advertiser\MatterController@postUploadImg');
         //消耗
         Route::get('advertiser/expends/day.json', 'Advertiser\ExpendController@getExpendsDay');
         Route::get('advertiser/expends/hour/{id}.json', 'Advertiser\ExpendController@getExpendsHour');

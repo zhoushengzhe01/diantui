@@ -65,6 +65,7 @@ class MatterController extends ApiController
         return response()->json(['data'=>$data], 200);
     }
 
+    //上传广告素材
     public function postMatter(Request $request)
     {
         self::Admin();
@@ -72,17 +73,15 @@ class MatterController extends ApiController
         $file = $request->file('file');
 
         $advertiser_id = trim($request->input('advertiser_id'));
-
         $advertiser = Advertiser::where('id', '=', $advertiser_id)->first();
-        if(empty($advertiser))
-        {
+        if(empty($advertiser)){
             return response()->json(['message'=>'你输入的广告主ID有误'], 300);
         }
 
         $sizeNum = intval($request->input('sizeNum'));
-
-        if(empty($sizeNum) || $sizeNum<0 || $sizeNum>7)
+        if(empty($sizeNum) || $sizeNum<0 || $sizeNum>7){
             return response()->json(['message'=>'错误入口'], 300);
+        }
         
         $imgSize = config('other.imgSize');
 
@@ -142,12 +141,63 @@ class MatterController extends ApiController
             return response()->json(['message'=>'不可上传文件'], 300);
         }
     }
+
+
+    //上传图片
+    public function postUploadImg(Request $request)
+    {
+        self::Admin();
+
+        $file = $request->file('file');
+        $advertiser_ad_id = trim($request->input('advertiser_ad_id'));
+        if(empty($advertiser_ad_id)){
+            return response()->json(['message'=>'缺少广告ID'], 300);
+        }
+
+        if($file->isValid()) {
+
+            $realPath = $file->getRealPath();
+            $tmpName = $file->getFileName();
+            $size = intval(($file->getSize()) / 1024);
+            $clientName = $file->getClientOriginalName();
+            $extension = $file->getClientOriginalExtension();
+
+            if($size>200){
+                return response()->json(['message'=>'上传的图片不能超过200KB'], 300);
+            }
+            if( !in_array($extension, ['png']) ){
+                return response()->json(['message'=>'图片格式不正确'], 300);
+            }
+
+            $dir = 'images/';
+            $filename = $advertiser_ad_id . '.' . $file->getClientOriginalExtension();
+            $path = $dir . $filename;
+            # 文件存在则删除
+            if(file_exists($path))
+            {
+                unlink($path);
+            }
+            $file->move($dir, $filename);
+            $img_info = getimagesize($path);
+
+            if($img_info[0]>360 || $img_info[1]<640)
+            {
+                unlink($path);
+                return response()->json(['message'=>'图片宽度不得大于360像素，高度不得小于640像素'], 300);
+            }
+            else
+            {
+                //储存base64格式
+                $base64 = base64_encode(file_get_contents($path));
+                file_put_contents(preg_replace("/\.[a-zA-Z]+$/",".txt",$path), $base64);
+
+                return response()->json(['message'=>'上传成功'], 200);  
+            }
+        }
+        else
+        {
+            return response()->json(['message'=>'不可上传文件'], 300);
+        }
+
+    }
 }
-
-
-
-
-
-
-
-

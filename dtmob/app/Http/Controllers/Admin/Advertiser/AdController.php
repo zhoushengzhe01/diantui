@@ -135,11 +135,19 @@ class AdController extends ApiController
             $ad->hours = json_decode($ad->hours, true);
         else
             $ad->hours = [];
+
         
-        $disk = \Storage::disk('upload_advertiser_img');
-        $filename = $id . '.png';
-        $bool = $disk->exists($filename);
-        return response()->json(['data'=>['ad'=>$ad,'bool'=>$bool]], 200);
+        $path = 'images/'.$id.'.png';
+        if(file_exists($path))
+        {
+            $ad->image = '/'.$path;
+        }
+        else
+        {
+            $ad->image = '';
+        }
+
+        return response()->json(['data'=>['ad'=>$ad]], 200);
     }
 
     public function putAd(Request $request, $id)
@@ -414,44 +422,9 @@ class AdController extends ApiController
                     $type[$key]->wechatios = AdvertiserAds::where('adstype_id', '=', $vel['id'])->where('state', '=', '1')->where('is_put_return_ad', '=', '0')->where('is_wechat', '1')->whereIn('client',['1','0'])->where('is_put_webmaster', '0')->count();
                 }
 
-                
-
-               
             }
         }
 
         return response()->json(['data'=>$type], 200);
-    }
-
-    public function uploadImg(Request $request, $id) {      
-        if (!$request->hasFile('file')) {
-            return response()->json([], 500);
-        }
-        $file = $request->file('file');
-        $data = ['status' => 200,'message' => 'success'];
-        if ($file->isValid()) {
-            // 获取文件相关信息
-            $originalName = $file->getClientOriginalName(); // 文件原名
-            $ext = $file->getClientOriginalExtension();     // 扩展名
-            $realPath = $file->getRealPath();   //临时文件的绝对路径
-            $type = $file->getClientMimeType();     // image/jpeg
-
-            // 上传文件
-            $filename = $id;
-            // 使用我们新建的uploads本地存储空间（目录）
-
-            $filename = $filename . '.' . $ext;
-            // 使用我们新建的upload_company_img本地存储空间（目录）
-            //这里的upload_company_img是配置文件的名称
-            $bool = \Storage::disk('upload_advertiser_img')->put($filename, file_get_contents($realPath));
-            if(!$bool) {
-                $data['status'] = 300;
-                $data['message'] = 'fail';
-            }
-        }else {
-            $data['status'] = 0;
-            $data['message'] = 'isValid is null';
-        }
-        return response()->json($data);
     }
 }

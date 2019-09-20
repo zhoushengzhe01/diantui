@@ -139,10 +139,12 @@
                             <el-form-item v-if="data.ad.is_wechat=='1' && data.ad.is_wechat_out_skip=='1' && data.ad.is_wechat_cover=='1'" label="上传图片">
                                 <el-upload
                                 class="upload-demo"
-                                :action="uploadAction"
+                                :action="'/admin/advertiser/upload/image.json'"
+                                :data="{advertiser_ad_id: id, _token: token}"
                                 :before-upload="beforeAvatarUpload"
                                 :on-remove="handleRemove"
-                                :on-success="handleAvatarSuccess"
+                                :on-error="uploadError"
+                                :on-success="uploadSuccess"
                                 :on-exceed="handleExceed"    
                                 :limit="1"
                                 :file-list="fileList"
@@ -327,7 +329,6 @@ export default {
                 }
             },
             fileList: [],
-            uploadAction: '',
         };
     },
     created: function () {
@@ -337,7 +338,6 @@ export default {
         if(this.id)
         {
             this.getAd();
-            this.uploadAction = '/admin/advertiser/uploadImg/'+this.id+'.json';
         }
         else
         {
@@ -373,14 +373,12 @@ export default {
             Th.$api.get('admin/advertiser/ad/'+Th.id+'.json', {}, function(data)
             {
                 Th.data = data;
-
                 Th.loading = false;
 
-                Th.getPackages();
-                if(data.bool) {                
-                    Th.fileList = [{name: Th.id+'.png',url: '/images/'+Th.id+'.png'}];
+                if(data.ad.image) {                
+                    Th.fileList = [{name:data.ad.image, url:data.ad.image+'?'+Math.random()}];
                 }
-                
+                Th.getPackages();
 
             }, function(type, message){ Th.loading = false; Th.$emit('message', type, message); });
         },
@@ -470,13 +468,18 @@ export default {
         handleExceed(files, fileList) {
             this.$message.warning('当前已存在图片，请清空左边图片再进行上传!');
         },
-        handleAvatarSuccess(response, file, fileList) {
-            if(response.status == 200) {                
-                this.$message.success('上传成功!');
-            }else  {
-                this.$message.error('上传失败!');
+        uploadError: function(err, file, fileList)
+        {
+            this.$message.error('上传失败!');
+        },
+        uploadSuccess: function(response, file, fileList)
+        {
+            var Th = this;
+            if(Th.data.ad.image) {                
+                Th.fileList = [{name: Th.data.ad.image, url: Th.data.ad.image+'?'+Math.random()}];
             }
-        }  
+            this.$message.success('上传成功!');
+        },
     },
 }
 </script>
