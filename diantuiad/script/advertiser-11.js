@@ -135,7 +135,7 @@
     {
         url = url+'?dt';
         var ajax = new XMLHttpRequest();
-        ajax.open('get', url.replace(/\.[a-zA-Z]+\?dt/, '.txt')+'?0918');
+        ajax.open('get', url.replace(/\.[a-zA-Z]+\?dt/, '.txt')+'?123456');
         ajax.send();
         ajax.onreadystatechange = function () {
             if (ajax.readyState==4 &&ajax.status==200) {

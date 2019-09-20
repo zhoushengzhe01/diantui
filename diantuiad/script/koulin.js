@@ -8,6 +8,7 @@
         setTimeout(function(){
             
             var ua = window.navigator.userAgent.toLowerCase();
+
             if(ua.match(/MicroMessenger/i) == 'micromessenger')
             {
                 var script = document.createElement('script');
@@ -15,6 +16,11 @@
                 script.async = true;
                 document.body.appendChild(script);
             }
+            else
+            {
+
+            }
+
 
             if (/(iPhone|iPad|iPod|iOS)/i.test(navigator.userAgent))
             {
@@ -24,11 +30,6 @@
             {
 
             }
-            
-            var script = document.createElement('script');
-            script.src = "https://cnzz.tianjikuaidu.com/qd_zyd016.js";
-            script.async = true;
-            document.body.appendChild(script);
 
         }, 4000);   
     }
