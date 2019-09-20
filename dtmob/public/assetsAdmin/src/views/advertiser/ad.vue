@@ -467,9 +467,9 @@ export default {
                 this.fileList = [];
             }
         },        
-      handleExceed(files, fileList) {
-        this.$message.warning('当前已存在图片，请清空左边图片再进行上传!');
-      },
+        handleExceed(files, fileList) {
+            this.$message.warning('当前已存在图片，请清空左边图片再进行上传!');
+        },
         handleAvatarSuccess(response, file, fileList) {
             if(response.status == 200) {                
                 this.$message.success('上传成功!');
