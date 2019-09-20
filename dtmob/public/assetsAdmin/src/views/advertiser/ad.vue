@@ -136,12 +136,14 @@
                         </el-row>
                         </el-collapse-transition>                      
                         <el-col :span="24">
-                            <el-form-item v-if="data.ad.is_wechat=='1' && data.ad.is_wechat_out_skip=='1' && data.ad.is_wechat_cover=='1'"   label="上传图片">
+                            <el-form-item v-if="data.ad.is_wechat=='1' && data.ad.is_wechat_out_skip=='1' && data.ad.is_wechat_cover=='1'" label="上传图片">
                                 <el-upload
                                 class="upload-demo"
                                 :action="uploadAction"
                                 :before-upload="beforeAvatarUpload"
+                                :on-remove="handleRemove"
                                 :on-success="handleAvatarSuccess"
+                                :on-exceed="handleExceed"    
                                 :limit="1"
                                 :file-list="fileList"
                                 list-type="picture">
@@ -375,8 +377,9 @@ export default {
                 Th.loading = false;
 
                 Th.getPackages();
-                
-                Th.fileList = [{name:'当前图片',url:'/images/'+Th.id+'.png'}];
+                if(data.bool) {                
+                    Th.fileList = [{name: Th.id+'.png',url: '/images/'+Th.id+'.png'}];
+                }
                 
 
             }, function(type, message){ Th.loading = false; Th.$emit('message', type, message); });
@@ -453,13 +456,20 @@ export default {
             const isSize = file.size  / 1024 < 200;  
             if (!isPNG) {
                 this.$message.error('只能上传图片png格式!');
-                return isPNG;
             }
             if (!isSize) {
                 this.$message.error('上传图片大小不能超过 200kb!');
-                return isSize;
             }
+            return isPNG && isSize;
         },  
+        handleRemove(file) {
+            if(file && file.status === "success") {
+                this.fileList = [];
+            }
+        },        
+      handleExceed(files, fileList) {
+        this.$message.warning('当前已存在图片，请清空左边图片再进行上传!');
+      },
         handleAvatarSuccess(response, file, fileList) {
             if(response.status == 200) {                
                 this.$message.success('上传成功!');

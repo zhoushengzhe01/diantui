@@ -136,7 +136,10 @@ class AdController extends ApiController
         else
             $ad->hours = [];
         
-        return response()->json(['data'=>['ad'=>$ad]], 200);
+        $disk = \Storage::disk('upload_advertiser_img');
+        $filename = $id . '.png';
+        $bool = $disk->exists($filename);
+        return response()->json(['data'=>['ad'=>$ad,'bool'=>$bool]], 200);
     }
 
     public function putAd(Request $request, $id)
