@@ -26,17 +26,13 @@ define('__ROOT__', __DIR__);
 */
 $route = [
 	'get'=>[
-		//普通广告
-		//'/coding/[0-9]+'=>'AdController@getCoding',
-		//'/coding/ads/[0-9]+'=>'AdsController@getCoding',
 		'/coding/[0-9]+'=>'AdsController@getCoding',
 		'/coding/info/[0-9]+'=>'AdsInforController@getCoding',
 		'/coding/return/[0-9]+'=>'AdsReturnController@getCoding',
 		'/weixin'=>'WeixinController@getWeixin',
 		'/pv'=>'StatisController@postPv',
 		'/pc'=>'StatisController@postPc',
-		//'/skip'=>'SkipController@returnSkip',	//返回跳转
-
+		
 		//二次点击
 		'/again/coding/[0-9]+'=>'AgainController@coding',
 		'/again/pc'=>'AgainController@againPc',

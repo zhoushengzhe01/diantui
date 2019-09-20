@@ -202,9 +202,8 @@ class TuiguangController
             ];
             self::$redis->select(0);
             self::$redis->lpush('earning_click', json_encode($click_data, true));
-
         }
-
+        
         //页面跳转
         header("Location: ".$advertiser_ad['link']);
     }
