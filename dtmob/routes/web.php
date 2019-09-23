@@ -253,6 +253,7 @@ Route::group(['prefix' => 'admin', 'namespace' => 'Admin'], function (){
         //素材
         Route::get('advertiser/matters.json', 'Advertiser\MatterController@getMatters');
         Route::post('advertiser/matter.json', 'Advertiser\MatterController@postMatter');
+        Route::post('advertiser/upload/image.json', 'Advertiser\MatterController@postUploadImg');
         //消耗
         Route::get('advertiser/expends/day.json', 'Advertiser\ExpendController@getExpendsDay');
         Route::get('advertiser/expends/hour/{id}.json', 'Advertiser\ExpendController@getExpendsHour');

@@ -136,11 +136,19 @@ class AdController extends ApiController
             $ad->hours = json_decode($ad->hours, true);
         else
             $ad->hours = [];
+
         
-        $disk = \Storage::disk('upload_advertiser_img');
-        $filename = $id . '.png';
-        $bool = $disk->exists($filename);
-        return response()->json(['data'=>['ad'=>$ad,'bool'=>$bool]], 200);
+        $path = 'images/'.$id.'.png';
+        if(file_exists($path))
+        {
+            $ad->image = '/'.$path;
+        }
+        else
+        {
+            $ad->image = '';
+        }
+
+        return response()->json(['data'=>['ad'=>$ad]], 200);
     }
 
     public function putAd(Request $request, $id)
@@ -415,9 +423,6 @@ class AdController extends ApiController
                     $type[$key]->wechatios = AdvertiserAds::where('adstype_id', '=', $vel['id'])->where('state', '=', '1')->where('is_put_return_ad', '=', '0')->where('is_wechat', '1')->whereIn('client',['1','0'])->where('is_put_webmaster', '0')->count();
                 }
 
-                
-
-               
             }
         }
 
