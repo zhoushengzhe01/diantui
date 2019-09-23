@@ -9,6 +9,7 @@ use App\Model\AdvertiserAds;
 use App\Service\AdvertiserExpendService;
 
 use Hash;
+use Excel;
 
 class AdController extends ApiController
 {
@@ -453,5 +454,85 @@ class AdController extends ApiController
             $data['message'] = 'isValid is null';
         }
         return response()->json($data);
+    }
+
+    public function exportAdvertiser(Request $request) {
+
+        self::Admin();
+
+        $data = [];
+        $date = $request->input('s_date');
+        $second1 = strtotime($date);
+        $second2 = strtotime(date('Y-m-d'));
+        $day = ($second2 - $second1)/86400;
+        $dayArr = [0,1,2];
+        $tempClient = ['android/ios','ios','android'];
+        if(in_array($day,$dayArr)) {
+            $data = (new AdvertiserExpendService)->getExportData($day, 0, 0, 0, $limitMoney = ['min'=>10,'isequal'=>false],self::$user);
+            if(count($data) > 0) {
+                $tempArr = [];
+                foreach($data as $key => &$val) {
+                    $tempArr[$key]['date'] = date( "Y/m/d",strtotime($date));
+                    $tempArr[$key]['username'] = $val['username'];
+                    $tempArr[$key]['advertiser_id'] = $val['advertiser_id'];
+                    $tempArr[$key]['title'] = $val['title'];
+                    $tempArr[$key]['money'] = $val['money'];
+                    $tempArr[$key]['reg_num'] = '';
+                    $tempArr[$key]['reg_price'] = '';
+                    $tempArr[$key]['bind_num'] = '';
+                    $tempArr[$key]['bind_price'] = '';
+                    $tempArr[$key]['recharge_num'] = '';
+                    $tempArr[$key]['recharge_price'] = '';
+                    $tempArr[$key]['recharge_money'] = '';
+                    $tempArr[$key]['client'] = $tempClient[$val['client']];
+                    $tempArr[$key]['inclusion_size'] = '';
+                    $tempArr[$key]['speed'] = '';
+                    $tempArr[$key]['recharge channel'] = '';
+                    $tempArr[$key]['link'] = $val['link'];
+                }
+                $data = $tempArr;
+            }
+        }
+        $fields = [['日期', '账号', 'ID', '名称', '消耗', '注册数量', '注册单价', '绑定数量', '绑定单价', '充值数量', '充值单价', '充值金额', '终端', '包体大小','下载速度','充值通道','广告地址']];
+        if(empty($data)) {
+            $data = [''];
+        } 
+        $data = array_merge($fields, $data);
+        Excel::create($date.'@导出产品',function($excel) use ($data) {
+            $excel->sheet(date('Y-m-d').'@导出产品', function($sheet) use ($data) {               
+                $sheet->rows($data);
+                $sheet->setWidth([
+                    'A' => 16,'B' => 13,'C' => 10,
+                    'D' => 30,'E' => 13,'F' => 13, 
+                    'G' => 13,'H' => 13,'I' => 13,
+                    'J' => 13,'K' => 13,'L' => 13,
+                    'M' => 13,'N' => 16,'O' => 13,
+                    'P' => 23,'Q' => 50
+                ])->setFontSize(12);
+                $count = count($data);          
+                //菜单样式
+                $sheet->cells('A1:Q1', function($cells) {
+                    $cells->setAlignment('center');
+                    $cells->setFontWeight('bold');
+                });
+                $sheet->cells('C2:C'.$count.'', function($cells) {
+                    $cells->setAlignment('left');
+                });
+                $sheet->cells('E2:E'.$count.'', function($cells) {
+                    $cells->setAlignment('left');
+                });
+                $sheet->setMergeColumn([ 
+                    'columns' => ['A'], 
+                    'rows' => [ 
+                        [2, $count]
+                    ], 
+                ]);
+                $sheet->cells('A2:A'.$count.'', function($cells) {
+                    $cells->setAlignment('center');
+                    $cells->setValignment('center'); 
+                    $cells->setFontWeight('bold');
+                });
+            });
+        })->export('xlsx');
     }
 }

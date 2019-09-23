@@ -236,6 +236,7 @@ Route::group(['prefix' => 'admin', 'namespace' => 'Admin'], function (){
         Route::put('advertiser/ad/{id}.json', 'Advertiser\AdController@putAd')->where('id', '[0-9]+');
         Route::post('advertiser/ad.json', 'Advertiser\AdController@postAd');      
         Route::post('advertiser/uploadImg/{id}.json', 'Advertiser\AdController@uploadImg')->where('id', '[0-9]+');
+        Route::get('advertiser/export.json','Advertiser\AdController@exportAdvertiser');
         //广告数量
         Route::get('advertiser/ad/number.json', 'Advertiser\AdController@getAdnumber');
         

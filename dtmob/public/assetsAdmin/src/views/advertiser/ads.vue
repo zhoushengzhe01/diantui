@@ -89,6 +89,14 @@
                         {{scope.row.money}} 元
                     </template>
                 </el-table-column>
+                
+                <el-table-column
+                    label=""
+                    min-width="160">
+                    <template slot-scope="scope">                  
+                        <a href="" @click.prevent="exportAdvertiser(scope.row.s_date)">导出产品</a>
+                    </template>
+                </el-table-column>
             
             </el-table>
         
@@ -325,6 +333,10 @@ export default {
 
             }, function(type, message){ Th.loadingItem = false; Th.$emit('message', type, message); });
         },
+        
+        exportAdvertiser: function(date) {          
+            window.location.href="/admin/advertiser/export.json?s_date="+date;
+        }
 
     },
 }

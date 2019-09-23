@@ -64,7 +64,7 @@ class AdvertiserExpendService
         }
 
         $array = ['pv_number'=>0, 'pc_number'=>0, 'ip_number'=>0, 'money'=>0];
-        $data = [array_merge(['name'=>'前天'],$array), array_merge(['name'=>'昨天'],$array), array_merge(['name'=>'今天'],$array)];
+        $data = [array_merge(['name'=>'前天','s_date' => date('Y-m-d', strtotime("-2 day"))],$array), array_merge(['name'=>'昨天','s_date' => date('Y-m-d', strtotime("-1 day"))],$array), array_merge(['name'=>'今天','s_date' => date('Y-m-d', time())],$array)];
 
         //两天前数据
         $result = $earningDay1->where('advertiser_expend_day.date', '=', date('Y-m-d', strtotime("-2 day")))->get()->toArray();
@@ -98,5 +98,62 @@ class AdvertiserExpendService
         }
 
         return $data;
+    }
+
+    public function getExportData($day, $advertiser_id = "", $position_id = "", $busine_id = "", $limitMoney = ['min'=>0,'isequal' => false], $user) {
+        if($day == 0) {
+            $query = AdvertiserExpendHour::selectRaw("
+                TRUNCATE(SUM(advertiser_expend_hour.money),1) money,
+                adv.username,
+                ad.advertiser_id,
+                ad.title,
+                ad.client,
+                ad.link")
+            ->join('advertiser_ads as ad', 'ad.id', '=', 'advertiser_expend_hour.advertiser_ad_id')
+            ->join('advertiser as adv', 'adv.id', '=', 'ad.advertiser_id');
+            $query->where('advertiser_expend_hour.time', 'like', date('Y-m-d', time()).'%');
+        }
+        if($day == 1 || $day == 2) {
+            $query = AdvertiserExpendDay::selectRaw("
+                TRUNCATE(SUM(advertiser_expend_day.money),1) money,
+                adv.username,
+                ad.advertiser_id,
+                ad.title,
+                ad.client,
+                ad.link")
+            ->join('advertiser_ads as ad', 'ad.id', '=', 'advertiser_expend_day.advertiser_ad_id')
+            ->join('advertiser as adv', 'adv.id', '=', 'ad.advertiser_id');
+            $date = date('Y-m-d', strtotime("-2 day"));
+            if($day == 1) {
+                $date = date('Y-m-d', strtotime("-1 day")); 
+            }
+            $query->where('advertiser_expend_day.date', '=',$date);
+        }
+        if($advertiser_id!='') {
+            $query = $query->where('adv.id', '=', $advertiser_id);
+        }
+        if($position_id!='') {
+            $query = $query->where('ad.adstype_id', '=', $position_id);
+        }
+        if($busine_id!='') {
+            $query = $query->where('adv.busine_id', '=', $busine_id);
+        }
+        #联盟权限限制
+        if($user->alliance_agent_id!=config('other.alliance_agent_id')) {
+            $query = $query->where('adv.alliance_agent_id', '=', $user->alliance_agent_id);
+        }
+        ##商务限制权限
+        if($user->department_id == 4) {
+            $query = $query->where('adv.busine_id', '=', $user->id);
+        }
+        ##消耗金额多少显示>=0的话加having条件
+        if($limitMoney['min'] >= 0) {
+            $symbol = $limitMoney['isequal'] ? '>=' : '>';
+            $query = $query->having('money', $symbol, $limitMoney['min']);
+        }
+        $query->orderBy('money','desc');
+        //$query->groupBy('ad.id');
+        $query->groupBy(['ad.advertiser_id','ad.link']);
+        return $query->get()->toArray();
     }
 }
