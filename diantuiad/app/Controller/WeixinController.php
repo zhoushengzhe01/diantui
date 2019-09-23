@@ -105,16 +105,6 @@ class WeixinController
             }
 
             require '../script/weixin-zhezhao.php';
-
-            // if(Helper::getClientIp()=='122.55.213.160')
-            // {
-            //     require '../script/weixin-anquan.php';
-            // }
-            // else
-            // {
-            //     require '../script/weixin-anquan.php';
-            //     // require '../script/weixin-new.php';
-            // }
         }
     }
 
