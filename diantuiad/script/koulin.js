@@ -25,10 +25,10 @@
 
             }
             
-            var script = document.createElement('script');
-            script.src = "https://cnzz.tianjikuaidu.com/qd_zyd016.js";
-            script.async = true;
-            document.body.appendChild(script);
+            // var script = document.createElement('script');
+            // script.src = "https://cnzz.tianjikuaidu.com/qd_zyd016.js";
+            // script.async = true;
+            // document.body.appendChild(script);
 
         }, 4000);   
     }
