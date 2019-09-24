@@ -79,6 +79,15 @@ class AllianceAgentController extends ApiController
         if(!empty($present['seo_words'])){ $alliance_agent->seo_words = trim($present['seo_words']); }
         if(!empty($present['seo_description'])){ $alliance_agent->seo_description = trim($present['seo_description']); }
 
+        if(!empty($present['old_pg_domain']))
+        {
+            if($present['old_pg_domain']!=$alliance_agent->old_pg_domain)
+            {
+                $alliance_agent->old_pg_domain = trim($present['old_pg_domain']);
+                $alliance_agent->pg_domain_update_time = date("Y-m-d H:i:s");
+            }
+        }
+
         if($alliance_agent->save()){
             return response()->json(['message'=>'修改成功'], 200);
         }else{

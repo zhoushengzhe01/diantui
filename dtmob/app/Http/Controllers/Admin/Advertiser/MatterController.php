@@ -180,7 +180,7 @@ class MatterController extends ApiController
             $file->move($dir, $filename);
             $img_info = getimagesize($path);
 
-            if($img_info[0]>360 || $img_info[1]<640)
+            if($img_info[0]>360 || $img_info[1]<intval($img_info[0]*1.60))
             {
                 unlink($path);
                 return response()->json(['message'=>'图片宽度不得大于360像素，高度不得小于640像素'], 300);

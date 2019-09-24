@@ -418,11 +418,16 @@
                             <el-input v-model="data.webmasterad.statis_code" placeholder="CNZZ统计代码"></el-input>
                         </el-form-item>
                     </el-col>
-                    <el-col :span="12" v-if="group.user.department_id!=3">
-                        <el-form-item label="是否检测">
-                            <el-select v-model="data.webmasterad.is_stat">
-                                <el-option label="检测" value="1"></el-option>
-                                <el-option label="停止" value="0"></el-option>
+                    <el-col :span="24">
+                        <el-form-item label="CSS样式">
+                            <el-input v-model="data.webmasterad.style" placeholder="CSS样式"></el-input>
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="12">
+                        <el-form-item label="样式类型">
+                            <el-select v-model="data.webmasterad.style_type">
+                                <el-option label="默认样式" :value="1"></el-option>
+                                <el-option label="样式一" :value="2"></el-option>
                             </el-select>
                         </el-form-item>
                     </el-col>

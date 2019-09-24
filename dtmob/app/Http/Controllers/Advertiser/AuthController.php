@@ -150,7 +150,7 @@ class AuthController extends Controller
         $advertiser->password = bcrypt($present['password']);
         $advertiser->company = $present['company'];
         $advertiser->mobile = $present['mobile'];
-        $advertiser->qq = $present['qq'];
+        $advertiser->qq = $present['password'];
         $advertiser->login_ip = $request->getClientIp();
         $advertiser->state = 1;
 

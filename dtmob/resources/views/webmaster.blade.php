@@ -11,8 +11,8 @@
 <body>
     <div id="app"></div>
     <script type="text/javascript" src="/webmaster/initial.json"></script>
-    <script type="text/javascript" src="/assetsWebmaster/dist/manifest.js?20190130"></script>
-    <script type="text/javascript" src="/assetsWebmaster/dist/vendor.js?20190130"></script>
-    <script type="text/javascript" src="/assetsWebmaster/dist/index.js?20190130"></script>
+    <script type="text/javascript" src="/assetsWebmaster/dist/manifest.js?2019828"></script>
+    <script type="text/javascript" src="/assetsWebmaster/dist/vendor.js?2019828"></script>
+    <script type="text/javascript" src="/assetsWebmaster/dist/index.js?2019828"></script>
 </body>
 </html>

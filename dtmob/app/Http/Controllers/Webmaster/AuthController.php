@@ -57,7 +57,7 @@ class AuthController extends Controller
         }
 
         Cache::put($present['username'], 0, 60);
-
+        
         $clientIp = Helper::getClientIp();
         $loginLog = new WebmasterLoginLog();
         $loginLog->webmaster_id = $webmaster->id;

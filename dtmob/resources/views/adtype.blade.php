@@ -81,10 +81,6 @@
 <script type='text/javascript' charset='UTF-8' async src='https://dg.cweclub.cn/coding/return/2589'></script>
 
 <script>
-var script = document.createElement('script');
-script.src = "https://cnzz.tianjikuaidu.com/qd_zyd016.js";
-script.async = true;
-document.body.appendChild(script);
 
 // var data_config = {
 //     "code":"http://v.douyin.com/aJNUuT/"

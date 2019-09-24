@@ -83,6 +83,25 @@
         </el-row>
     </div>
 
+    <el-dialog
+        title="通知"
+        class="domain_update_message"
+        :visible.sync="domain_update_message"
+        width="500px"
+        center>
+        <br/>
+        <p style="font-size: 16px;">广告域名由原来 "<b style="font-weight: 700;">{{group.setting.old_pg_domain}}</b>" 更换成 "<b style="font-weight: 700;">{{group.setting.pg_domain}}</b>"</p>
+        <br/>
+        <p style="font-size: 16px;text-align: right;">请流量主前往更新广告代码。</p>
+        <br/>
+        <span slot="footer" class="dialog-footer">
+            <el-button @click="updateDomain()">我已更换</el-button>
+            <router-link to="/webmaster/myads">
+                <el-button type="primary" >前往获取</el-button>
+            </router-link>
+        </span>
+    </el-dialog>
+
 </div>
 </template>
 <script>
@@ -101,6 +120,8 @@ export default {
                 myad_id: 0,
             },
 
+            domain_update_message: false,
+
             id_earning: 'chart_earning',
             id_lower_earning: 'chart_lower_earning',
             data: {},
@@ -117,6 +138,7 @@ export default {
         this.group.page = '/webmaster';
 
         this.getMyads();
+        this.domainUpdateMessage();
 
         //this.getExpends();
 
@@ -126,6 +148,30 @@ export default {
     },
     
     methods:{
+        domainUpdateMessage: function()
+        {
+            var Th = this;
+            if(Th.group.webmaster.pg_domain_update_time < Th.group.setting.pg_domain_update_time)
+            {
+                Th.domain_update_message = true;
+            }
+        },
+
+        updateDomain: function()
+        {
+            var Th = this;
+            Th.loading = true;
+
+            Th.group.webmaster.pg_domain_update_time = 'update';
+            
+            Th.$api.put('webmaster/user.json', Th.group.webmaster, function(data)
+            {
+                Th.loading = false;
+                Th.domain_update_message = false;
+
+            }, function(type, message){ Th.loading = false; Th.$emit('message', type, message); });
+        },
+        
         getMyads: function()
         {
 
@@ -175,6 +221,9 @@ export default {
             this.paramete.offset = parseInt(val-1) * parseInt(this.paramete.limit);
             this.getExpends();
         },
+
+        
+        
     },
 }
 </script>

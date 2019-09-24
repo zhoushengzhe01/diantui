@@ -95,6 +95,10 @@
                     <el-input v-model="alliance_agent.key"></el-input>
                 </el-form-item>
 
+                <el-form-item label="老的广告域名">
+                    <el-input v-model="alliance_agent.old_pg_domain"></el-input>
+                </el-form-item>
+
                 <el-form-item label="展示域名">
                     <el-input v-model="alliance_agent.pg_domain"></el-input>
                 </el-form-item>

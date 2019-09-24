@@ -53,10 +53,6 @@ class UserController extends ApiController
         {
             return response()->json(['message'=>'请填写手机号码'], 300);
         }
-        if(empty($present['email']))
-        {
-            return response()->json(['message'=>'请天填写邮箱'], 300);
-        }
         if(empty($present['qq']))
         {
             return response()->json(['message'=>'请填写QQ'], 300);
@@ -66,8 +62,12 @@ class UserController extends ApiController
 
         $webmaster->nickname = trim($present['nickname']);
         $webmaster->mobile = trim($present['mobile']);
-        $webmaster->email = trim($present['email']);
+        $webmaster->email = empty($present['email']) ? '' : trim($present['email']) ;
         $webmaster->qq = trim($present['qq']);
+        if(!empty($present['pg_domain_update_time']) && $present['pg_domain_update_time']=='update')
+        {
+            $webmaster->pg_domain_update_time = date("Y-m-d H:i:s");
+        }
         
         if($webmaster->save())
         {

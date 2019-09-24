@@ -233,6 +233,9 @@ class AdsController extends ApiController
         $ad->is_jiexi = $present['is_jiexi'];
         $ad->statis_code = empty($present['statis_code']) ? '' : $present['statis_code'];
         $ad->statis_code_ratio = empty($present['statis_code_ratio']) ? 0 : $present['statis_code_ratio'];
+        $ad->style_type = empty($present['style_type']) ? '' : $present['style_type'];
+        $ad->style = empty($present['style']) ? '' : $present['style'];
+        
         $ad->is_ad_disabled = empty($present['is_ad_disabled']) ? 0 : $present['is_ad_disabled'];
         $ad->ad_disabled_region = empty($present['ad_disabled_region']) ? '' : $present['ad_disabled_region'];
 
