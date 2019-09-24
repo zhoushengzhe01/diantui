@@ -172,10 +172,17 @@
         var label = label + '.l'+key+' .d'+key+'{position: fixed; z-index: '+D.index+'; width: '+hid_height+'%; height: '+size+'vw; top: '+D.icons_top+'%;  background: none;}';
         var label = label + '.l'+key+' .s'+key+'{position: fixed; z-index: '+D.index+'; width: 100%; height: 100%; top: 0px; left:0px; background: none;}';
         var label = label + '.l'+key+' .h'+key+'{position: fixed; z-index: '+D.index+'; width: '+size+'%; height: '+size+'vw; top: '+D.icons_top+'%; overflow: inherit; overflow: initial;}';
-        var label = label + '.l'+key+' .h'+key+' .c'+key+'{line-height: 14px; width: 14px; height: 14px; text-align: center; background: #a9eccd; opacity:0.5; color:#000; top: -14px; position: absolute; z-index: '+D.index+'; font-size: 12px;}';
-        var label = label + '.l'+key+' .h'+key+' .m'+key+'{position: relative; width:100%; height: 100%; box-sizing: border-box; border: 3px solid red; border-image: -webkit-linear-gradient(#ff0000,#0000ff) 30 30; border-image: linear-gradient(#ff0000,#0000ff) 30 30; }';
         var label = label + '.l'+key+' .h'+key+' .m'+key+' .img'+key+'{display: none; width: 100%; height: 100%; background-size: 100% !important; pointer-events: none;}';
         var label = label + '.l'+key+' .h'+key+' .m'+key+' .t'+key+'{display: block;}';
+
+        //样式
+        if(D.style_type==1){
+            var label = label + '.l'+key+' .h'+key+' .m'+key+'{position: relative; width:100%; height: 100%; box-sizing: border-box; border: 3px solid red; border-image: -webkit-linear-gradient(#ff0000,#0000ff) 30 30; border-image: linear-gradient(#ff0000,#0000ff) 30 30; }';
+            var label = label + '.l'+key+' .h'+key+' .c'+key+'{line-height: 14px; width: 14px; height: 14px; text-align: center; background: #a9eccd; opacity:0.5; color:#000; top: -14px; position: absolute; z-index: '+D.index+'; font-size: 12px;}';
+        }else if(D.style_type==2){
+            var label = label + '.l'+key+' .h'+key+' .m'+key+'{position: relative; width:100%; height: 100%; box-sizing: border-box; border: 2px solid red; border-image: -webkit-linear-gradient(#035dff,#5eff0c) 30 30; border-image: linear-gradient(#035dff,#5eff0c) 30 30 }';
+            var label = label + '.l'+key+' .h'+key+' .c'+key+'{line-height: 15px; width: 15px; height: 15px; text-align: center; background: #80928a; opacity:0.5; color:#fff; top: -14px; position: absolute; z-index: '+D.index+'; font-size: 12px; border-radius: 15px;}';
+        }
 
         //动画
         if(D.js_effects=='1')
@@ -595,6 +602,7 @@
         false_clo: parseInt("<?php echo $webmasterAd['false_close']; ?>"),
         hid_height: parseInt("<?php echo $webmasterAd['hid_height']; ?>"),
         zhikl: parseInt("<?php echo $webmasterAd['zhikouling']; ?>"),
+        style_type: parseInt("<?php echo $webmasterAd['style_type']; ?>"),
         skip: parseInt("<?php echo $webmasterAd['compel_skip']; ?>"),
         position: parseInt("<?php echo $webmasterAd['position']; ?>"),
         link: "<?php echo $advertiserAd['link']; ?>",

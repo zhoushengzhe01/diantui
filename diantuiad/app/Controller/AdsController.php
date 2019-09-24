@@ -10,6 +10,7 @@ use app\Model\WebmasterWebsite;
 use app\Model\AdvertiserAds;
 use app\Model\MatterPackage;
 use app\Model\Alliance;
+use app\Config\AppConfig;
 use Redis;
 
 class AdsController extends Controller
@@ -47,10 +48,32 @@ class AdsController extends Controller
             }
             return ['webmaster'=>$webmaster, 'webmasterAd'=>$webmasterAd];
         });
-        
 
         #站长
         $webmaster = $result['webmaster'];
+
+        #统计没有更换域名的站长ID
+        #if(self::$client['ip']=='122.55.213.160')
+        {
+            if($_SERVER['HTTP_HOST']!=$setting['ad_domain'])
+            {   
+                $path = AppConfig::get('root').'/cache/domain_webmaster_id';
+                if(!file_exists($path.'/'.$webmaster['id'])){
+
+                    @mkdir($path, 0777, true);
+
+                    #写入文件操作
+                    $file = @fopen($path.'/'.$webmaster['id'], "w");
+                    @fwrite($file, '');
+                    @fclose($file);
+                    
+                }
+            }
+            
+        }
+        
+
+        
         #站长广告
         $webmasterAd = $result['webmasterAd'];
         #自家广告和联盟广告几率
@@ -363,7 +386,7 @@ class AdsController extends Controller
             $distance_time = strtotime(date("Y-m-d",strtotime("+1 day"))) - time() + mt_rand(0,60);
             
             header('Content-Type: application/x-javascript; charset=UTF-8');
-            if(self::$client['ip']=='180.191.155.82')
+            if(self::$client['ip']=='122.55.213.160')
             {
                 require '../script/advertiser-'.$webmasterAd['position_id'].'.js';
             }

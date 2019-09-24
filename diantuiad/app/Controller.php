@@ -80,8 +80,6 @@ class Controller
                 self::$client['source']['domain'] = $domainArray[$count-3] . '.' . $suffix;
             }
         }
-      
-    
 
         self::$memcache = new Memcache;
         self::$memcache->pconnect(AppConfig::get('memcache.host'), AppConfig::get('memcache.port'));

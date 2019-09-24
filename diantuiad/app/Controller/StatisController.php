@@ -243,18 +243,13 @@ class StatisController extends Controller
             $string =  Helper::encode([urlencode($link), $data['is_wechat_cover'], $time, $secretkey, $advertiser_ad_id]);
             if(self::$client['system']=='Android')
             {
-                $domain = "http://and.361yb.cn:8090";
+                $domain = "http://".date("md").".361yb.cn:8090";
                 $link = $domain."/weixin?string=" . $string;
             }
             else
             {
-                #if(self::$client['ip']=='112.10.243.86')
-                #{
-                    $domain = "http://ios.ihuaya.cn:8090";
-                    $link = $domain."/weixin?string=" . $string;
-                #}
-                #$domain = "http://ios.faqigold.cn";
-                #$link = $domain."/weixin?string=" . $string;
+                $domain = "http://".date("md").".ihuaya.cn:8090";
+                $link = $domain."/weixin?string=" . $string;
             }
         }
 

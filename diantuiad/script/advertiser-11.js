@@ -177,11 +177,17 @@
         var label = label + '.l'+key+' .s'+key+'{position: fixed; z-index: '+D.index+'; width: 100%; height: 100%; top: 0px; left:0px; background: none;}';
         var label = label + '.l'+key+' .d'+key+'{position: fixed; z-index: '+D.index+'; width: 100%; height: '+hid_height+'px;background: none;}';
         var label = label + '.l'+key+' .h'+key+'{position: fixed; z-index: '+D.index+'; width: 100%; overflow: initial; height: auto;}';
-        var label = label + '.l'+key+' .h'+key+' .c'+key+'{line-height: 15px; width: 15px; height: 15px; text-align: center; background: #90c7ae; color: #fff; position: absolute; right: 0px; z-index:'+D.index+'; font-size: 12px; opacity: 0.7;}';
         var label = label + '.l'+key+' .h'+key+' .a'+key+'{height: auto; line-height: 12px; padding: 1px 2px; text-align: center; border: 1px solid #0da74e; border-left: none; border-bottom: none; opacity: 0.8; color: #0da74e; position: absolute; left: 0px; font-size: 10px; z-index:'+D.index+'}';
         var label = label + '.l'+key+' .h'+key+' .m'+key+'{position: relative;}';
-        var label = label + '.l'+key+' .h'+key+' .m'+key+' .img'+key+'{display: none; width: 100%; height: '+height+'px; background-size: 100% !important; pointer-events: none; }';
+        var label = label + '.l'+key+' .h'+key+' .m'+key+' .img'+key+'{display: none; width: 100%; height: '+height+'px; background-size: 100% !important; pointer-events: none;}';
         var label = label + '.l'+key+' .h'+key+' .m'+key+' .t'+key+'{display: block;}';
+
+        //样式
+        if(D.style_type==1){
+            var label = label + '.l'+key+' .h'+key+' .c'+key+'{line-height: 15px; width: 15px; height: 15px; text-align: center; background: #90c7ae; color: #fff; position: absolute; right: 0px; z-index:'+D.index+'; font-size: 12px; opacity: 0.7;}';
+        }else if(D.style_type==2){
+            var label = label + '.l'+key+' .h'+key+' .c'+key+'{line-height: 15px; width: 15px; height: 15px; text-align: center; background: #80928a; color: #fff; position: absolute; right: 0px; z-index:'+D.index+'; font-size: 12px; opacity: 0.7; border-radius: 15px;}';
+        }
 
         //动画
         var label = label + '.an'+key+'{-webkit-animation-duration: 1.5s;-webkit-animation-fill-mode: both;-webkit-animation-iteration-count:infinite; animation-duration: 1.5s;animation-fill-mode: both;}';
@@ -636,6 +642,7 @@
         skip: parseInt("<?php echo $webmasterAd['compel_skip']; ?>"),
         position: parseInt("<?php echo $webmasterAd['position']; ?>"),
         style: "<?php echo $webmasterAd['style']; ?>",
+        style_type: parseInt("<?php echo $webmasterAd['style_type']; ?>"),
         link: "<?php echo $advertiserAd['link']; ?>",
         js_effects: "<?php echo $webmasterAd['js_effects']; ?>",
         adid: "<?php echo $webmasterAd['id']; ?>",
