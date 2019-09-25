@@ -504,7 +504,7 @@ class AdController extends ApiController
         } 
         $data = array_merge($fields, $data);
         Excel::create($date.'@导出产品',function($excel) use ($data) {
-            $excel->sheet(date('Y-m-d').'@导出产品', function($sheet) use ($data) {               
+            $excel->sheet(date('Y-m-d').'@导出记录', function($sheet) use ($data) {               
                 $sheet->rows($data);
                 $sheet->setWidth([
                     'A' => 16,'B' => 13,'C' => 10,
