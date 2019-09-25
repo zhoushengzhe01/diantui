@@ -726,7 +726,7 @@ export default {
         getCity: function() 
         {
             var Th = this;
-            Th.ipnumber_loading = true;
+            Th.city_loading = true;
             Th.$api.get('admin/data/click/city.json', Th.paramete, function(data)
             {
                 Th.city_data = data;
