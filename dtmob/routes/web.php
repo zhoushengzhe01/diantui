@@ -383,6 +383,7 @@ Route::group(['prefix' => 'admin', 'namespace' => 'Admin'], function (){
     Route::get('data/click/jssystem.json', 'Data\ClickJssystemController@getJssystem');
     Route::get('data/click/screen.json', 'Data\ClickScreenController@getScreen');
     Route::get('data/click/domain.json', 'Data\ClickDomainController@getDomain');
+    Route::get('data/click/city.json', 'Data\ClickCityController@getCity');
 
     Route::get('data/click/click_position.json', 'Data\ClickPositionController@getClickposition');
     #Route::get('data/click/baidu_keyword.json', 'Data\ClickBaidukeywordController@getBaidukeyword');

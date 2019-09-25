@@ -407,6 +407,23 @@
                 </el-table>
             </el-col>
             <el-col :span="8">
+                <el-table height="250" border style="width: 100%" :data="city_data" v-loading="city_loading">
+                    <el-table-column label="城市分布">
+                        <el-table-column
+                            label="城市"
+                            prop="name"
+                            min-width="120">
+                        </el-table-column>
+                        <el-table-column
+                            label="数量"
+                            prop="value">
+                        </el-table-column>
+                        <el-table-column
+                            label="百分比"
+                            prop="percent">
+                        </el-table-column>
+                    </el-table-column>
+                </el-table>
                 
             </el-col>
         </el-row>
@@ -478,6 +495,9 @@ export default {
 
             domain_data: [],
             domain_loading: true,
+
+            city_data: [],
+            city_loading: true,
         };
     },
     created: function () {
@@ -508,6 +528,7 @@ export default {
                 Th.getIpnumber();
                 Th.getPosition();
                 Th.getDomain();
+                Th.getCity()
 
             }, function(type, message){ Th.loading = false; Th.$emit('message', type, message); });
         },
@@ -701,6 +722,17 @@ export default {
 
             }, function(type, message){ Th.ios_android_loading = false; Th.$emit('message', type, message); });
 
+        },
+        getCity: function() 
+        {
+            var Th = this;
+            Th.ipnumber_loading = true;
+            Th.$api.get('admin/data/click/city.json', Th.paramete, function(data)
+            {
+                Th.city_data = data;
+                Th.city_loading = false;
+
+            }, function(type, message){ Th.city_loading = false; Th.$emit('message', type, message); });
         },
     },
 }
