@@ -142,7 +142,15 @@
                     label="广告类型"
                     min-width="80">
                     <template slot-scope="scope">
-                        {{scope.row.position_name}}<br/>
+                        <span v-if="scope.row.position_id == 11">
+                            {{scope.row.position == 1 ? '顶':'底'}}-{{scope.row.position_name}}<br/>
+                        </span>
+                        <span v-else-if="scope.row.position_id == 13">
+                            {{scope.row.position == 1 ? '左':'右'}}-图标<br/>
+                        </span>
+                        <span v-else>
+                            {{scope.row.position_name}}<br/>
+                        </span>
                         {{scope.row.billing}}&nbsp;
                         <span v-if="scope.row.is_stat=='1'">检</span>
                     </template>
