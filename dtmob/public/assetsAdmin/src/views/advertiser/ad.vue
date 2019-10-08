@@ -86,6 +86,20 @@
                     </el-col>
                 </el-row>
 
+                <!--流量池投放-->
+                <el-row class="box-item">
+                    <div class="box-title">
+                        <div class="title-item">流量池投放</div>
+                    </div>
+                    <el-col :span="12">
+                        <el-form-item label="投放流量池">
+                            <el-checkbox-group v-model="data.ad.flowpool">
+                                <el-checkbox v-for="item in group.flowpools" :key="item.key" :label="item.id">{{item.name}}</el-checkbox>
+                            </el-checkbox-group>
+                        </el-form-item>
+                    </el-col>
+                </el-row>
+
                 <!--广告属性-->
                 <el-row class="box-item">
                     <div class="box-title">

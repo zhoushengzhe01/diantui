@@ -7,7 +7,7 @@
 <title></title>
 </head>
 <body>
-    <img src="https://image.ghosttty.cn/images/<?=$advertiser_ad_id;?>.png?1233">
+    <img src="https://image.cweclub.cn/images/<?=$advertiser_ad_id;?>.png?1233">
 
     <div class="zhao">
         <img src="http://tiangong.torsya.com/_public/wechat_ios.png"/>

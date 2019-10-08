@@ -9,17 +9,8 @@
         </div>
 
         <div class="box" v-loading="loading">
-
+            
             <el-table :data="data.clicks" style="width: 100%">
-                <el-table-column
-                    prop="name"
-                    label="系统/IP"
-                    min-width="140">
-                    <template slot-scope="scope">
-                        {{scope.row.ip}}<br/>
-                        {{scope.row.ip}}
-                    </template>
-                </el-table-column>
 
                 <el-table-column
                     prop="domain"
@@ -47,7 +38,7 @@
                 </el-table-column>
 
                 <el-table-column
-                    label="屏幕/点击位置"
+                    label="屏幕/位置"
                     min-width="100">
                     <template slot-scope="scope">
                         屏：{{scope.row.screen}}<br/>位：{{scope.row.clickp}}
@@ -55,9 +46,12 @@
                 </el-table-column>
 
                 <el-table-column
-                    prop="created_at"
+                    prop=""
                     label="时间"
-                    min-width="100">
+                    min-width="120">
+                    <template slot-scope="scope">
+                        {{scope.row.created_at}}<br/>{{scope.row.ip}}
+                    </template>
                 </el-table-column>
             </el-table>
 
@@ -76,7 +70,7 @@
         <el-dialog title="点击分布" :visible.sync="show" class="small_dialog">
             <canvas id="canvas" width="360" height="640" style="border: 1px solid #ccc;">
 
-            </canvas>     
+            </canvas>
         </el-dialog>
 
     </div>
@@ -154,7 +148,7 @@ export default {
                 console.log(point);
 
                 Th.canvas(point);
-
+                
             }, 500);
             
         }

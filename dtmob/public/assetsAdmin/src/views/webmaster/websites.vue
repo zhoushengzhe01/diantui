@@ -69,7 +69,7 @@
                         <el-tag v-if="scope.row.state=='0'" type="danger" size="small">待审</el-tag>
                         <el-tag v-if="scope.row.state=='1'" type="success" size="small">通过</el-tag>
                         <el-tag v-if="scope.row.state=='2'" type="info" size="small">拒绝</el-tag>
-                        <a :href="'https://www.aizhan.com/cha/'+scope.row.domain" target="_blank"><img :src="'https://baidurank.aizhan.com/api/mbr?domain='+scope.row.domain+'&style=images'" /></a>
+                        <a :href="'https://www.aizhan.com/cha/'+scope.row.domain" target="_blank"><img :src="'https://baidurank.aizhan.com/api/mbr?domain='+scope.row.domain+'&style=images'"/></a>
                     </template>
                 </el-table-column>
 

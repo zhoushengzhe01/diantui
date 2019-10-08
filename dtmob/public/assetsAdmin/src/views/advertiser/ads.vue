@@ -5,14 +5,15 @@
             <div class="search-box">
                 <el-form :inline="true" :model="paramete" class="demo-form-inline" size="mini">
                     <el-form-item>
-                        <el-input v-model="paramete.advertiser_id" placeholder="广告主ID"></el-input>
-                    </el-form-item>
-                    <el-form-item>
-                        <el-input v-model="paramete.username" placeholder="广告主名字"></el-input>
+                        <el-input v-model="paramete.id" placeholder="广告id"></el-input>
                     </el-form-item>
 
                     <el-form-item>
-                        <el-input v-model="paramete.id" placeholder="广告ID"></el-input>
+                        <el-input v-model="paramete.advertiser_id" placeholder="广告主id"></el-input>
+                    </el-form-item>
+                    
+                    <el-form-item>
+                        <el-input v-model="paramete.username" placeholder="广告主名字"></el-input>
                     </el-form-item>
 
                     <el-form-item>
@@ -39,6 +40,13 @@
                     <el-form-item>
                         <el-select v-model="paramete.adstype_id" placeholder="选择类型" style="width:120px;">
                             <el-option v-for="item in group.adtype" :key="item.key" :label="item.name" :value="item.id"></el-option>
+                        </el-select>
+                    </el-form-item>
+
+                    <el-form-item>
+                        <el-select v-model="paramete.flowpool" placeholder="流量池查询">
+                            <el-option label="选择全部" value=""></el-option>
+                            <el-option v-for="item in group.flowpools" :key="item.key" :label="item.name" :value="item.id"></el-option>
                         </el-select>
                     </el-form-item>
 
@@ -115,9 +123,10 @@
 
                 <el-table-column
                     label="联盟"
-                    min-width="60">
+                    min-width="100">
                     <template slot-scope="scope">
-                        <span v-for="item in group.alliance_agents" :key="item.key" v-if="item.id==scope.row.alliance_agent_id">{{item.name}}</span>
+                        <span v-for="item in group.alliance_agents" :key="item.key" v-if="item.id==scope.row.alliance_agent_id">{{item.name}}</span><br/>
+                        <span v-for="item in group.flowpools" :key="item.key" v-if="scope.row.flowpool.indexOf(item.id) >= 0">{{item.name}}</span><br/>
                     </template>
                 </el-table-column>
 
@@ -132,9 +141,9 @@
 
                 <el-table-column
                     label="标题"
-                    min-width="160">
+                    min-width="100">
                     <template slot-scope="scope">
-                        <router-link target="_blank" :to="'/admin/advertiser/packages?id='+scope.row.package_id">{{scope.row.title}}</router-link>
+                        <router-link target="_blank" style="white-space: nowrap;" :to="'/admin/advertiser/packages?id='+scope.row.package_id">{{scope.row.title}}</router-link>
                         <br/>
                         <span class="info">权重:</span>
                         <span v-if="scope.row.is_hour_weight=='0'">{{scope.row.weight}}</span>

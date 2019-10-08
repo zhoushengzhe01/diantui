@@ -8,6 +8,7 @@ use App\Model\AdvertiserLoginLog;
 use App\Model\Advertiser;
 use App\Model\Users;
 use App\Model\Agents;
+use Cache;
 use Hash;
 
 class AdvertiserController extends ApiController
@@ -100,10 +101,15 @@ class AdvertiserController extends ApiController
         if(empty($advertiser)){
             return response()->json(['message'=>'未找到数据'], 300);
         }
-        
+
+        # 修改密码并且解封账号
+        if(!empty($present['password'])){
+            $advertiser->password = bcrypt($present['password']);
+            Cache::put($advertiser->username, 0, 60);
+        }
+
         if(!empty($present['alliance_agent_id'])){ $advertiser->alliance_agent_id = trim($present['alliance_agent_id']); }
         if(!empty($present['nickname'])){ $advertiser->nickname = trim($present['nickname']); }
-        if(!empty($present['password'])){ $advertiser->password = bcrypt($present['password']); }        
         if(!empty($present['company'])){ $advertiser->company = trim($present['company']); }        
         if(!empty($present['email'])){ $advertiser->email = trim($present['email']); }        
         if(!empty($present['mobile'])){ $advertiser->mobile = trim($present['mobile']); }        
@@ -124,7 +130,7 @@ class AdvertiserController extends ApiController
         
         if($advertiser->save())
         {
-            return response()->json(['message'=>'添加成功'], 200);
+            return response()->json(['message'=>'操作成功'], 200);
         }
         else
         {

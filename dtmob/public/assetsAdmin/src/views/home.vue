@@ -29,7 +29,7 @@
     </div>
 
     <div class="homePage">
-    <el-row :gutter="24">
+    <!-- <el-row :gutter="24">
         <el-col :span="8">
             <div class="box">
                 <h5>账户信息</h5>
@@ -55,6 +55,81 @@
                     <div class="earning"><b>30 条</b><br/><span>WAP广告</span></div>
                     <div class="earning"><b>10 条</b><br/><span>微信广告</span></div>
                 </div>
+            </div>
+        </el-col>
+    </el-row> -->
+
+    
+
+    <el-row :gutter="24">
+
+        <el-col :span="12" v-for="item in adnumber" :key="item.key">
+            <div class="box">
+                <h5>{{item.name}}广告</h5>
+                <br/>
+                <el-table :data="item.number" style="width: 100%">
+                    <el-table-column
+                    prop="name"
+                    label="类型">
+                    </el-table-column>
+    
+                    <el-table-column
+                    label="wap/安">
+                        <template slot-scope="scope">
+                        {{scope.row.wapandroid}} 条
+                        </template>
+                    </el-table-column>
+    
+                    <el-table-column
+                    label="wap/ios">
+                        <template slot-scope="scope">
+                        {{scope.row.wapios}} 条
+                        </template>
+                    </el-table-column>
+    
+                    <el-table-column
+                    label="微信/安">
+                        <template slot-scope="scope">
+                        {{scope.row.wechatandroid}} 条
+                        </template>
+                    </el-table-column>
+    
+                    <el-table-column
+                    prop="wechatios"
+                    label="微信/ios">
+                        <template slot-scope="scope">
+                        {{scope.row.wechatios}} 条
+                        </template>
+                    </el-table-column>
+                </el-table>
+            </div>
+        </el-col>
+
+    </el-row>
+
+    <el-row :gutter="24">
+        <el-col :span="12">
+            <div class="box">
+                <h5>展示分布</h5>
+                <x-chart :id="id_pv" ref="chartpv"></x-chart>
+            </div>
+        </el-col>
+        <el-col :span="12">
+            <div class="box">
+                <h5>IP 分布</h5>
+                <x-chart :id="id_ip" ref="chartip"></x-chart>
+            </div>
+        </el-col>
+        <el-col :span="12">
+            <div class="box">
+                <h5>点击分布</h5>
+                <x-chart :id="id_pc" ref="chartpc"></x-chart>
+            </div>
+        </el-col>
+        <el-col :span="12">
+            <div class="box">
+                <h5>小时成本</h5>
+                <x-chart :id="id_mon" ref="chartmon"></x-chart>
             </div>
         </el-col>
     </el-row>
@@ -83,73 +158,6 @@
         </el-col>
     </el-row>
 
-    <el-row :gutter="24">
-        <el-col :span="12">
-            <div class="box">
-                <h5>展示分布</h5>
-                <x-chart :id="id_pv" ref="chartpv"></x-chart>
-            </div>
-        </el-col>
-        <el-col :span="12">
-            <div class="box">
-                <h5>IP 分布</h5>
-                <x-chart :id="id_ip" ref="chartip"></x-chart>
-            </div>
-        </el-col>
-    </el-row>
-
-    <el-row :gutter="24">
-        <el-col :span="12">
-            <div class="box">
-                <h5>点击分布</h5>
-                <x-chart :id="id_pc" ref="chartpc"></x-chart>
-            </div>
-        </el-col>
-        <el-col :span="12">
-            <div class="box">
-                <h5>开启广告</h5>
-                <br/>
-                <el-table :data="adnumber" style="width: 100%">
-                    <el-table-column
-                    prop="name"
-                    label="广告\类型">
-                    </el-table-column>
-    
-                    <el-table-column
-                    label="WAP/安卓">
-                        <template slot-scope="scope">
-                        {{scope.row.wapandroid}} 条
-                        </template>
-                    </el-table-column>
-    
-                    <el-table-column
-                    label="WAP/IOS">
-                        <template slot-scope="scope">
-                        {{scope.row.wapios}} 条
-                        </template>
-                    </el-table-column>
-    
-                    <el-table-column
-                    label="微信/安卓">
-                        <template slot-scope="scope">
-                        {{scope.row.wechatandroid}} 条
-                        </template>
-                    </el-table-column>
-    
-                    <el-table-column
-                    prop="wechatios"
-                    label="微信/IOS">
-                        <template slot-scope="scope">
-                        {{scope.row.wechatios}} 条
-                        </template>
-                    </el-table-column>
-    
-                </el-table>
-            </div>
-            
-        </el-col>
-    </el-row>
-
     </div>
 </div>
 </template>
@@ -171,6 +179,8 @@ export default {
             id_pv: 'chartpv',
             id_pc: 'chartpc',
             id_ip: 'chartip',
+            id_mon: 'chartmon',
+            
             webmasterEarning: {},
             parameteWebmaster: {},
             loadingWebmaster: true,
@@ -229,6 +239,8 @@ export default {
                 Th.initWebmasterEarningPc(data);
                 
                 Th.initWebmasterEarningIp(data);
+
+                Th.initWebmasterEarningMon(data);
 
                 Th.loadingWebmaster = false;
 
@@ -321,6 +333,36 @@ export default {
             }];
             
             this.$refs.chartip.init(data.default, seriesData);
+        },
+
+        initWebmasterEarningMon: function(data)
+        {  
+            var today = [];
+            var yesterday = [];
+
+            //今天
+            for(var index in data.today)
+            {
+                today[index] = data.today[index].money;
+            }
+
+            //昨天
+            for(var index in data.yesterday)
+            {
+                yesterday[index] = data.yesterday[index].money;
+            }
+
+            var seriesData = [{
+                color: '#CCCCCC',
+                name: '昨天',
+                data: yesterday,
+            }, {
+                color: '#53d192',
+                name: '今日',
+                data: today,
+            }];
+            
+            this.$refs.chartmon.init(data.default, seriesData);
         },
     },
 }

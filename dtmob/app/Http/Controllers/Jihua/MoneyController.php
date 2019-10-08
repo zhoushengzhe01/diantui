@@ -22,9 +22,9 @@ class MoneyController extends BaseController
     {
         //周日周六 不提现
         //包含的日期
-        $date = ['20190913'];
+        $date = ['20190913', '20191005', '20191006', '20191007'];
 
-        if(date("w")!='0' && date("w")!='6' && !in_array(date("Ymd"), $date) )
+        if( date("w")!='6' && !in_array(date("Ymd"), $date) )
         {
             start:
 

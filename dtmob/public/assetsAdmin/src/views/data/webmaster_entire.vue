@@ -4,36 +4,35 @@
         <h3 class="title">整体分析</h3>
         <div class="search-box">
             <el-form :inline="true" :model="paramete" class="demo-form-inline" size="mini">
-                <el-form-item>
-                    <el-form-item label="" v-if="data.count">
-                        {{data.click_count}} 条数据
-                    </el-form-item>
-                    <el-form-item>
-                        <el-select v-model="paramete.sort" placeholder="流量排序">
-                            <el-option label="消耗排序" value="1"></el-option>
-                            <el-option label="最新排序" value="2"></el-option>
-                        </el-select>
-                    </el-form-item>
-                    <el-form-item>
-                        <el-select v-model="paramete.grade" placeholder="流量等级">
-                            <el-option label="低级" value="1"></el-option>
-                            <el-option label="中级" value="2"></el-option>
-                            <el-option label="高级" value="3"></el-option>
-                        </el-select>
-                    </el-form-item>
-                    <el-form-item>
-                        <el-input v-model="paramete.url" placeholder="访问URL"></el-input>
-                    </el-form-item>
-                    <el-form-item>
-                        <el-input v-model="paramete.webmaster_id" placeholder="站长ID"></el-input>
-                    </el-form-item>
-                    <el-form-item>
-                        <el-input v-model="paramete.webmaster_ad_id" placeholder="广告ID"></el-input>
-                    </el-form-item>
-                    <el-form-item>
-                        <el-time-select v-model="paramete.date_time" :picker-options="{start: '00:00', step: '00:30', end: '23:30'}" placeholder="选择时间"></el-time-select>
-                    </el-form-item>
+                <el-form-item label="" v-if="data.count">
+                    {{data.click_count}} 条数据
                 </el-form-item>
+                <el-form-item>
+                    <el-select v-model="paramete.sort" placeholder="流量排序">
+                        <el-option label="消耗排序" value="1"></el-option>
+                        <el-option label="最新排序" value="2"></el-option>
+                    </el-select>
+                </el-form-item>
+                <el-form-item>
+                    <el-select v-model="paramete.grade" placeholder="流量等级">
+                        <el-option label="低级" value="1"></el-option>
+                        <el-option label="中级" value="2"></el-option>
+                        <el-option label="高级" value="3"></el-option>
+                    </el-select>
+                </el-form-item>
+                <el-form-item>
+                    <el-input v-model="paramete.url" placeholder="访问URL"></el-input>
+                </el-form-item>
+                <el-form-item>
+                    <el-input v-model="paramete.webmaster_id" placeholder="站长ID"></el-input>
+                </el-form-item>
+                <el-form-item>
+                    <el-input v-model="paramete.webmaster_ad_id" placeholder="广告ID"></el-input>
+                </el-form-item>
+                <el-form-item>
+                    <el-time-select v-model="paramete.date_time" :picker-options="{start: '00:00', step: '00:30', end: '23:30'}" placeholder="选择时间"></el-time-select>
+                </el-form-item>
+                
                 <el-form-item>
                     <el-button type="success" @click="getClicks">查询</el-button>
                 </el-form-item>
@@ -44,10 +43,9 @@
 
     <div class="box" v-loading="loading">
         <el-row :gutter="24" v-if="data.ads">
-            <el-col :span="16">
+            <el-col :span="24">
                 <el-table border style="width: 100%" :data="data.ads">
                     <el-table-column label="广告信息">
-
                         <el-table-column
                             label="站长ID">
                             <template slot-scope="scope">
@@ -55,63 +53,90 @@
                                 广:{{scope.row.id}}
                             </template>
                         </el-table-column>
+                        
+                        <el-table-column
+                            label="站长名称">
+                            <template slot-scope="scope">
+                                <router-link target="_blank" style="white-space: nowrap;" :to="'/admin/webmaster/'+scope.row.webmaster_id">{{scope.row.username}}</router-link><br/>
+                                <span v-for="item in group.flowpools" :key="item.key" v-if="item.id==scope.row.flow_pool_id">{{item.name}}</span>
+                            </template>
+                        </el-table-column>
 
                         <el-table-column
-                            label="名称"
-                            prop="position_name">
+                            label="联盟/客服">
+                            <template slot-scope="scope">
+                                <span v-for="item in group.alliance_agents" :key="item.key" v-if="item.id==scope.row.alliance_agent_id">{{item.name}}</span><br/>
+                                <span v-for="item in group.services" :key="item.key" v-if="item.id==scope.row.service_id">{{item.nickname}}</span>
+                            </template>
+                        </el-table-column>
+
+                        <el-table-column
+                            label="IP评分">
+                            <template slot-scope="scope">
+                                {{scope.row.ip_point_time}}<br/>
+                                {{scope.row.ip_point}} 分
+                            </template>
                         </el-table-column>
 
                         <el-table-column
                             label="位置">
                             <template slot-scope="scope">
-                                <span v-if="scope.row.position=='1'">左飘/上飘</span>
-                                <span v-if="scope.row.position=='2'">右飘/下飘</span>
+                                <span v-if="scope.row.position=='1' && scope.row.position_id==11">上</span>
+                                <span v-if="scope.row.position=='2' && scope.row.position_id==11">下</span>
+                                <span v-if="scope.row.position=='1' && scope.row.position_id==13">左</span>
+                                <span v-if="scope.row.position=='2' && scope.row.position_id==13">右</span>
+                                <br/>
+                                {{scope.row.position_name}}
                             </template>
                         </el-table-column>
 
                         <el-table-column
                             label="计费率">
                             <template slot-scope="scope">
-                                {{scope.row.out_advertiser_price}}/{{scope.row.in_advertiser_price}}
+                                {{scope.row.out_advertiser_price}}%<br/>{{scope.row.in_advertiser_price}}%
                             </template>
                         </el-table-column>
 
                         <el-table-column
-                            label="暗高度">
+                            label="暗层/强跳">
                             <template slot-scope="scope">
-                                {{scope.row.hid_height}}
+                                {{scope.row.hid_height}}-{{scope.row.hid_height_chance}}%
+                                <br/>
+                                {{scope.row.compel_skip}}%
                             </template>
                         </el-table-column>
 
                         <el-table-column
-                            label="暗计费">
+                            label="强点">
                             <template slot-scope="scope">
-                                {{scope.row.hid_height_chance}}%
+                                <span v-if="scope.row.compel_click=='1'">开启-{{scope.row.compel_chance}}%<br/>{{scope.row.compel_interval}}分钟</span>
+                                <span v-if="scope.row.compel_click!='1'">关闭</span>
                             </template>
                         </el-table-column>
 
                         <el-table-column
-                            label="直返">
+                            label="假关闭">
                             <template slot-scope="scope">
-                                开启 <br/>
-                                20%
+                                {{scope.row.false_close}}%<br>
+                                {{scope.row.grade}} 级
                             </template>
                         </el-table-column>
-
+                        
                         <el-table-column
-                            label="点击率">
-                            <template slot-scope="scope">
-                                10 % <br/>
-                                10 %
-                            </template>
-                        </el-table-column>
-
-                        <el-table-column
-                            label="状态"
-                            min-width="80">
+                            label="状态">
                             <template slot-scope="scope">
                                 <el-tag v-if="scope.row.state=='1'" type="success" size="small">正常</el-tag>
                                 <el-tag v-if="scope.row.state=='2'" type="info" size="small">被封</el-tag>
+                            </template>
+                        </el-table-column>
+
+                        <el-table-column
+                            label="操作"
+                            min-width="80">
+                            <template slot-scope="scope">
+                                <router-link target="_blank" :to="'/admin/webmaster/ad/'+scope.row.id">编辑</router-link>
+                                <router-link target="_blank" :to="'/admin/webmaster/earningclick/'+scope.row.id">点击</router-link><br/>
+                                <router-link target="_blank" :to="'/admin/webmaster/earningday/'+scope.row.id">每天数据</router-link>
                             </template>
                         </el-table-column>
                     </el-table-column>
@@ -125,14 +150,119 @@
                     </el-pagination>
                 </div>
             </el-col>
+        </el-row>
+        <br/>
+        <br/>
 
+        <el-row :gutter="24">
+            <el-col :span="16">
+                <el-table height="600" border style="width: 100%" :data="dataday.earnings">
+                    <el-table-column label="点击来源">
+                        <el-table-column
+                            label="PV量/单价">
+                            <template slot-scope="scope">
+                                {{scope.row.pv_number}}&nbsp;&nbsp;&nbsp;{{ parseInt(scope.row.money / scope.row.pv_number * 10000)/10 }}<span class="info">/千</span>
+                                <el-progress :show-text="false" :stroke-width="3" :percentage="scope.row.pv_number/dataday.max_pv_number*100" status="success"></el-progress>
+                            </template>
+                        </el-table-column>
+
+                        <el-table-column
+                            label="IP量/点击">
+                            <template slot-scope="scope">
+                                {{scope.row.ip_number}}&nbsp;&nbsp;&nbsp;{{ parseInt(scope.row.money / scope.row.ip_number * 100000)/10 }}<span class="info">/万</span>
+                                <el-progress :show-text="false" :stroke-width="3" :percentage="scope.row.ip_number/dataday.max_ip_number*100" status="success"></el-progress>
+                            </template>
+                        </el-table-column>
+
+                        <el-table-column
+                            label="PC量/点击率">
+                            <template slot-scope="scope">
+                                {{scope.row.pc_number}}&nbsp;&nbsp;&nbsp;{{ parseInt(scope.row.pc_number / scope.row.pv_number * 10000)/100 }}%
+                                <el-progress :show-text="false" :stroke-width="3" :percentage="scope.row.pc_number/dataday.max_pc_number*100" status="success"></el-progress>
+                            </template>
+                        </el-table-column>
+
+                        <el-table-column
+                            width="100"
+                            label="总额(元)">
+                            <template slot-scope="scope">
+                                <div>{{scope.row.money}}<span class="info">元</span></div>
+                            </template>
+                        </el-table-column>
+
+                        <el-table-column
+                            prop="date"
+                            width="100"
+                            label="时间">
+                        </el-table-column>
+
+                        <el-table-column
+                            v-bind:router="true"
+                            fixed="right"
+                            width="60"
+                            label="操作">
+                            <template slot-scope="scope">
+                                <el-button type="text" size="medium" @click="getEarningHourChart(scope.row.webmaster_ad_id, scope.row.date)">小时</el-button>
+                            </template>
+                        </el-table-column>
+                    </el-table-column>
+                </el-table>
+            </el-col>
+            <el-col :span="8">
+                <x-chart height="200" :id="id" ref="chart"></x-chart>
+            </el-col>
+        </el-row>
+        <br/>
+        <br/>
+
+        <el-row :gutter="24">
+            <el-col :span="8">
+                <el-table height="250" border style="width: 100%" :data="click_source_data" v-loading="click_source_loading">
+                    <el-table-column label="点击来源">
+                        <el-table-column
+                            label="名称"
+                            prop="name"
+                            min-width="120">
+                        </el-table-column>
+                        <el-table-column
+                            label="数量"
+                            prop="value">
+                        </el-table-column>
+                        <el-table-column
+                            label="百分比"
+                            prop="percent">
+                        </el-table-column>
+                    </el-table-column>
+                </el-table>
+            </el-col>
+            <el-col :span="8">
+                <el-table height="250" border style="width: 100%" :data="ipnumber_data" v-loading="ipnumber_loading">
+                    <el-table-column label="同UVIP数量">
+                        <el-table-column
+                            label="版本"
+                            prop="number"
+                            min-width="120">
+                        </el-table-column>
+                        <el-table-column
+                            label="数量"
+                            prop="value">
+                        </el-table-column>
+                        <el-table-column
+                            label="百分比"
+                            prop="percent">
+                        </el-table-column>
+                    </el-table-column>
+                </el-table>
+            </el-col>
             <el-col :span="8">
                 <el-table height="250" border style="width: 100%" :data="domain_data" v-loading="domain_loading">
                     <el-table-column label="广告域名">
                         <el-table-column
                             label="名称"
-                            prop="domain"
                             min-width="120">
+                            <template slot-scope="scope">
+                                <span style="white-space: nowrap;">{{scope.row.domain}}</span>
+                            </template>
                         </el-table-column>
                         <el-table-column
                             label="数量"
@@ -145,37 +275,11 @@
                         <el-table-column
                             label="操作">
                             <template slot-scope="scope">
-                                <span @click="paramete.url=scope.row.domain">检测</span>
+                                <img :src="'https://baidurank.aizhan.com/api/mbr?domain='+scope.row.domain+'&style=images'"/>
                             </template>
                         </el-table-column>
                     </el-table-column>
                 </el-table>
-                
-                <!-- <el-table border style="width: 100%" :data="data.webmaster_ad">
-                    <el-table-column label="广告信息">
-
-                        <el-table-column
-                            label="名称"
-                            prop="position_name">
-                        </el-table-column>
-
-                        <el-table-column
-                            label="位置">
-                            <template slot-scope="scope">
-                                <span v-if="scope.row.position=='1'">左飘/上飘</span>
-                                <span v-if="scope.row.position=='2'">右飘/下飘</span>
-                            </template>
-                        </el-table-column>
-
-                        <el-table-column
-                            label="计费率">
-                            <template slot-scope="scope">
-                                {{scope.row.out_advertiser_price}}/{{scope.row.in_advertiser_price}}
-                            </template>
-                        </el-table-column>
-
-                    </el-table-column>
-                </el-table> -->
             </el-col>
         </el-row>
         <br/>
@@ -368,46 +472,11 @@
         <br/>
 
         <el-row :gutter="24">
-            <el-col :span="8">
-                <el-table height="250" border style="width: 100%" :data="click_source_data" v-loading="click_source_loading">
-                    <el-table-column label="点击来源">
-                        <el-table-column
-                            label="名称"
-                            prop="name"
-                            min-width="120">
-                        </el-table-column>
-                        <el-table-column
-                            label="数量"
-                            prop="value">
-                        </el-table-column>
-                        <el-table-column
-                            label="百分比"
-                            prop="percent">
-                        </el-table-column>
-                    </el-table-column>
-                </el-table>
+            <el-col :span="16">
+                <div id="container" style="width:460px;height:860px"></div>
             </el-col>
             <el-col :span="8">
-                <el-table height="250" border style="width: 100%" :data="ipnumber_data" v-loading="ipnumber_loading">
-                    <el-table-column label="同UVIP数量">
-                        <el-table-column
-                            label="版本"
-                            prop="number"
-                            min-width="120">
-                        </el-table-column>
-                        <el-table-column
-                            label="数量"
-                            prop="value">
-                        </el-table-column>
-                        <el-table-column
-                            label="百分比"
-                            prop="percent">
-                        </el-table-column>
-                    </el-table-column>
-                </el-table>
-            </el-col>
-            <el-col :span="8">
-                <el-table height="250" border style="width: 100%" :data="city_data" v-loading="city_loading">
+                <el-table height="400" border style="width: 100%" :data="city_data" v-loading="city_loading">
                     <el-table-column label="城市分布">
                         <el-table-column
                             label="城市"
@@ -424,21 +493,6 @@
                         </el-table-column>
                     </el-table-column>
                 </el-table>
-                
-            </el-col>
-        </el-row>
-        <br/>
-        <br/>
-
-        <el-row :gutter="24">
-            <el-col :span="8">
-                <div id="container" style="width:460px;height:860px"></div>
-            </el-col>
-            <el-col :span="8">
-                
-            </el-col>
-            <el-col :span="8">
-                
             </el-col>
         </el-row>
     </div>
@@ -447,6 +501,7 @@
         
 <script>
 import HighCharts from 'highcharts'
+import XChart from './../chart.vue'
 
 export default {
     name: 'recharges',
@@ -458,6 +513,9 @@ export default {
             },
             loading: true,
             data: {},
+            id: 'chart',
+
+            dataday: {},
 
             group: Group,
             browser_data: [],
@@ -504,6 +562,9 @@ export default {
         this.group.page = window.location.pathname;
         this.getClicks();
     },
+    components: {
+        XChart
+    },
     methods:{
         getClicks: function()
         {
@@ -515,6 +576,7 @@ export default {
                 Th.loading = false;
                 Th.data = data;
 
+                
                 Th.getWeixinWap();
                 Th.getIosAndroid();
                 Th.getIframe();
@@ -528,7 +590,9 @@ export default {
                 Th.getIpnumber();
                 Th.getPosition();
                 Th.getDomain();
-                Th.getCity()
+                Th.getCity();
+                Th.getEarningDay(data.ads[0].id);
+                Th.getEarningHourChart(data.ads[0].id, '2019-09-30');
 
             }, function(type, message){ Th.loading = false; Th.$emit('message', type, message); });
         },
@@ -733,6 +797,52 @@ export default {
                 Th.city_loading = false;
 
             }, function(type, message){ Th.city_loading = false; Th.$emit('message', type, message); });
+        },
+        getEarningDay: function(webmaster_ad_id)
+        {
+            var Th = this;
+            Th.$api.get('admin/webmaster/earning/day/'+webmaster_ad_id+'.json', [], function(data)
+            {
+                Th.dataday = data;
+
+            }, function(type, message){ Th.$emit('message', type, message); });
+        },
+        getEarningHourChart: function(webmaster_ad_id, date) {
+
+            var Th = this;
+
+            Th.$api.get('admin/webmaster/earning/hour/chart/'+webmaster_ad_id+'.json', { date: date, type: 2}, function(data){
+
+                Th.initialHourChart(data);
+                
+            }, function(type, message){ Th.$emit('message', type, message); });
+        },
+        initialHourChart: function(data)
+        {
+            var today = [];
+            var yesterday = [];
+
+            //今天
+            for(var index in data.today){
+                today[index] = data.today[index].pv_number;
+            }
+
+            //昨天
+            for(var index in data.yesterday){
+                yesterday[index] = data.yesterday[index].pv_number;
+            }
+
+            var seriesData = [{
+                color: '#CCCCCC',
+                name: '昨天',
+                data: yesterday,
+            }, {
+                color: '#53d192',
+                name: '今日',
+                data: today,
+            }];
+
+            this.$refs.chart.init(data.default, seriesData);
         },
     },
 }

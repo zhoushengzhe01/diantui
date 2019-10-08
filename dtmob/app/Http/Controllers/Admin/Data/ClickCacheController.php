@@ -23,15 +23,17 @@ class ClickCacheController extends ApiController
         $offset = trim($request->input('offset'));
 
         #广告
-        $ads = WebmasterAds::where('earning_day', '>', 0);
+        $ads = WebmasterAds::select('webmaster_ads.*', 'webmaster.username', 'webmaster.flow_pool_id', 'webmaster.grade', 'webmaster.alliance_agent_id', 'webmaster.service_id')
+            ->join('webmaster', 'webmaster.id','=','webmaster_ads.webmaster_id');
+
         if(!empty($webmaster_id)){
-            $ads = $ads->where('webmaster_id', $webmaster_id);
+            $ads = $ads->where('webmaster_ads.webmaster_id', $webmaster_id);
         }
         if(!empty($webmaster_ad_id)){
-            $ads = $ads->where('id', $webmaster_ad_id);
+            $ads = $ads->where('webmaster_ads.id', $webmaster_ad_id);
         }
         $count = $ads->count();
-        $ads = $ads->orderBy('earning_day', 'desc')->offset($offset)->limit(1)->get()->toArray();
+        $ads = $ads->orderBy('webmaster_ads.earning_day', 'desc')->offset($offset)->limit(1)->get()->toArray();
         if(empty($ads)){
             return response()->json(['message'=>'找不到广告位'], 300);
         }
@@ -58,7 +60,7 @@ class ClickCacheController extends ApiController
         for($i=0 ; $i<24 ; $i++){
             $hour[] = date("d日H点", strtotime('-'.$i.' hour'));
         }
-
+        
         #每天收益
         $earningDay = EarningDay::where('webmaster_ad_id', $ad_id)->limit(5)->orderBy('id', 'desc')->get();
 

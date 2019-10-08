@@ -55,6 +55,14 @@
                 </el-table-column>
 
                 <el-table-column
+                    label="流量池"
+                    min-width="80">
+                    <template slot-scope="scope">
+                        <span v-for="item in group.flowpools" :key="item.key" v-if="item.id==scope.row.flow_pool_id">{{item.name}}</span>
+                    </template>
+                </el-table-column>
+
+                <el-table-column
                     prop="nickname"
                     label="真实姓名"
                     min-width="120">
@@ -65,6 +73,7 @@
                     label="QQ号码"
                     min-width="120">
                 </el-table-column>
+
                 <el-table-column
                     label="结算"
                     min-width="80">
@@ -73,6 +82,7 @@
                         <span v-if="scope.row.withdrawals_type=='2'">周结</span>
                     </template>
                 </el-table-column>
+
                 <el-table-column
                     label="余额"
                     min-width="100">
@@ -80,6 +90,7 @@
                         {{scope.row.money}} 元
                     </template>
                 </el-table-column>
+
                 <el-table-column
                     label="推荐人ID"
                     min-width="100">
@@ -88,6 +99,7 @@
                         <span v-if="!scope.row.pid" class="info">无</span>
                     </template>
                 </el-table-column>
+
                 <el-table-column
                     label="等级"
                     min-width="100">
@@ -95,6 +107,7 @@
                         {{scope.row.grade}} 级
                     </template>
                 </el-table-column>
+
                 <el-table-column
                     label="状态"
                     min-width="80">

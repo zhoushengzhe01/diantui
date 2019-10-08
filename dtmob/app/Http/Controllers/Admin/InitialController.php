@@ -14,6 +14,7 @@ use App\Model\Setting;
 use App\Model\AllianceAgent;
 use App\Model\AdvertiserAdCategorys;
 use App\Model\AdsPosition;
+use App\Model\Flowpool;
 use Session;
 
 class InitialController extends ApiController
@@ -68,6 +69,7 @@ class InitialController extends ApiController
                 ->orderBy('sort', 'asc')
                 ->get(['id', 'name', 'url', 'pid', 'icon']);
         }
+        $group['flowpools'] = Flowpool::where('state', '1')->orderBy('sort', 'asc')->get();
         
         $group['user'] = $user;
         $group['menus'] = $menus;

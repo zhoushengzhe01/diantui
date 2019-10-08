@@ -7,7 +7,7 @@ use App\Model\EarningHour;
 class EarningService
 {
     #加三个搜索
-    public function getEarning($webmaster_id="", $webmaster_ad_id="", $position_id="", $service_id="", $user)
+    public function getEarning($webmaster_id="", $webmaster_ad_id="", $position_id="", $service_id="", $user, $username='', $flow_pool_id='')
     {
 
         //前天数据
@@ -51,7 +51,20 @@ class EarningService
             $earningDay2 = $earningDay2->where('web.service_id', '=', $service_id);
             $earningHour = $earningHour->where('web.service_id', '=', $service_id);
         }
+        if(!empty($username))
+        {
+            $earningDay1 = $earningDay1->where('web.username', 'like', '%'.$username.'%');
+            $earningDay2 = $earningDay2->where('web.username', 'like', '%'.$username.'%');
+            $earningHour = $earningHour->where('web.username', 'like', '%'.$username.'%');
+        }
+        if(!empty($flow_pool_id))
+        {
+            $earningDay1 = $earningDay1->where('web.flow_pool_id', '=', $flow_pool_id);
+            $earningDay2 = $earningDay2->where('web.flow_pool_id', '=', $flow_pool_id);
+            $earningHour = $earningHour->where('web.flow_pool_id', '=', $flow_pool_id);
+        }
 
+        
         #联盟权限限制
         if($user->alliance_agent_id!=config('other.alliance_agent_id')){
             $earningDay1 = $earningDay1->where('web.alliance_agent_id', '=', $user->alliance_agent_id);

@@ -7,7 +7,7 @@ use App\Model\AdvertiserExpendHour;
 class AdvertiserExpendService
 {
 
-    public function getEarning($advertiser_id="", $advertiser_ad_id="", $position_id="", $busine_id="", $user)
+    public function getEarning($advertiser_id="", $advertiser_ad_id="", $position_id="", $busine_id="", $user, $username='', $flowpool='')
     {
 
         //前天数据
@@ -49,6 +49,18 @@ class AdvertiserExpendService
             $earningDay1 = $earningDay1->where('adv.busine_id', '=', $busine_id);
             $earningDay2 = $earningDay2->where('adv.busine_id', '=', $busine_id);
             $earningHour = $earningHour->where('adv.busine_id', '=', $busine_id);
+        }
+        if($username!='')
+        {
+            $earningDay1 = $earningDay1->where('adv.username', 'like', '%'.$username.'%');
+            $earningDay2 = $earningDay2->where('adv.username', 'like', '%'.$username.'%');
+            $earningHour = $earningHour->where('adv.username', 'like', '%'.$username.'%');
+        }
+        if($flowpool!='')
+        {
+            $earningDay1 = $earningDay1->where('ad.flowpool', 'like', '%'.$flowpool.'%');
+            $earningDay2 = $earningDay2->where('ad.flowpool', 'like', '%'.$flowpool.'%');
+            $earningHour = $earningHour->where('ad.flowpool', 'like', '%'.$flowpool.'%');
         }
         #联盟权限限制
         if($user->alliance_agent_id!=config('other.alliance_agent_id')){

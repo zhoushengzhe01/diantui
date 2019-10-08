@@ -7,36 +7,39 @@
         <div class="box" v-loading="loadingday">
 
             <el-table :data="dataday.earnings" style="width: 100%">
-                <el-table-column
-                    prop="webmaster_ad_id"
-                    label="广告位ID"
-                    min-width="100">
-                </el-table-column>
 
                 <el-table-column
                     label="PV量/单价"
-                    min-width="150">
+                    min-width="180">
                     <template slot-scope="scope">
-                        {{scope.row.pv_number}} <span v-if="scope.row.hudong_pv_number">（{{scope.row.hudong_pv_number}}）</span>
-                        &nbsp;&nbsp;&nbsp;{{ parseInt(scope.row.money / scope.row.pv_number * 10000)/10 }}<span class="info">/千</span>
+                        {{scope.row.pv_number}}&nbsp;&nbsp;&nbsp;{{ parseInt(scope.row.money / scope.row.pv_number * 10000)/10 }}<span class="info">/千</span>
+                        <el-progress :show-text="false" :stroke-width="3" :percentage="scope.row.pv_number/dataday.max_pv_number*100" status="success"></el-progress>
                     </template>
                 </el-table-column>
 
                 <el-table-column
                     label="IP量/点击"
-                    min-width="150">
+                    min-width="180">
                     <template slot-scope="scope">
-                        {{scope.row.ip_number}} <span v-if="scope.row.hudong_pc_number">（{{scope.row.hudong_pc_number}}）</span>
-                        &nbsp;&nbsp;&nbsp;{{ parseInt(scope.row.money / scope.row.ip_number * 100000)/10 }}<span class="info">/万</span>
+                        {{scope.row.ip_number}}&nbsp;&nbsp;&nbsp;{{ parseInt(scope.row.money / scope.row.ip_number * 100000)/10 }}<span class="info">/万</span>
+                        <el-progress :show-text="false" :stroke-width="3" :percentage="scope.row.ip_number/dataday.max_ip_number*100" status="success"></el-progress>
                     </template>
                 </el-table-column>
 
                 <el-table-column
                     label="PC量/点击率"
-                    min-width="150">
+                    min-width="180">
                     <template slot-scope="scope">
-                        {{scope.row.pc_number}} <span v-if="scope.row.hudong_pc_number">（{{scope.row.hudong_pc_number}}）</span>
-                        &nbsp;&nbsp;&nbsp;{{ parseInt(scope.row.pc_number / scope.row.pv_number * 10000)/100 }}%
+                        {{scope.row.pc_number}}&nbsp;&nbsp;&nbsp;{{ parseInt(scope.row.pc_number / scope.row.pv_number * 10000)/100 }}%
+                        <el-progress :show-text="false" :stroke-width="3" :percentage="scope.row.pc_number/dataday.max_pc_number*100" status="success"></el-progress>
+                    </template>
+                </el-table-column>
+
+                <el-table-column
+                    label="联盟价"
+                    min-width="100">
+                    <template slot-scope="scope">
+                        {{scope.row.alliance_money}}<span class="info">元</span>
                     </template>
                 </el-table-column>
 
@@ -50,14 +53,6 @@
                 </el-table-column>
 
                 <el-table-column
-                    label="联盟广告"
-                    min-width="100">
-                    <template slot-scope="scope">
-                        {{scope.row.alliance_money}}<span class="info">元</span>
-                    </template>
-                </el-table-column>
-
-                <el-table-column
                     prop="date"
                     label="时间"
                     min-width="100">
@@ -65,7 +60,7 @@
 
                 <el-table-column
                     label="提成"
-                    min-width="60">
+                    min-width="80">
                     <template slot-scope="scope">
                         <el-switch
                             @change="putEarningDay(scope.row)"

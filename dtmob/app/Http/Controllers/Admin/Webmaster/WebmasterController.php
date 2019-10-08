@@ -8,6 +8,7 @@ use App\Http\Helpers\CityReader;
 use App\Model\Webmaster;
 use App\Model\WebmasterLog;
 use App\Model\WebmasterLoginLog;
+use Cache;
 use Hash;
 
 class WebmasterController extends ApiController
@@ -123,11 +124,17 @@ class WebmasterController extends ApiController
         }
 
         $present = $request->input();
+        if(!empty($present['password']))
+        {
+            $webmaster->password = bcrypt($present['password']);
+            Cache::put($webmaster->username, 0, 60);
+        }
+
         if(!empty($present['service_id'])){ $webmaster->service_id = $present['service_id']; }
         if(!empty($present['alliance_agent_id'])){ $webmaster->alliance_agent_id = $present['alliance_agent_id']; }
         if(!empty($present['username'])){ $webmaster->username = $present['username']; }
         if(!empty($present['nickname'])){ $webmaster->nickname = $present['nickname']; }
-        if(!empty($present['password'])){ $webmaster->password = bcrypt($present['password']);; }
+        if(!empty($present['flow_pool_id']) || $present['flow_pool_id']==0){ $webmaster->flow_pool_id = $present['flow_pool_id']; }
         if(!empty($present['allow_alliance'])){ $webmaster->allow_alliance = json_encode($present['allow_alliance'], true); }
         if(!empty($present['disabled_alliance'])){ $webmaster->disabled_alliance = json_encode($present['disabled_alliance'], true); }
         if(!empty($present['withdrawals_state'])){ $webmaster->withdrawals_state = $present['withdrawals_state']; }

@@ -82,9 +82,9 @@ class EarningController extends BaseController
                     $advertiser->save();
 
                     //检测账户余额小于20分钟消耗
-                    $warningMoney = intval($advertiser->last_hour_consume/2);
-                    if($warningMoney<150){
-                        $warningMoney = 150;
+                    $warningMoney = intval($advertiser->last_hour_consume/3);
+                    if($warningMoney<100){
+                        $warningMoney = 100;
                     }
                     if($advertiser->money < $warningMoney ){
                         $advertiserAd->state = '2';

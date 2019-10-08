@@ -5,33 +5,6 @@
             <div class="search-box">
                 <el-form :inline="true" :model="paramete" class="demo-form-inline" size="mini">
                     <el-form-item>
-                        <el-select v-model="paramete.orderby" placeholder="广告排序">
-                            <el-option label="计费率A-Z" value="in_advertiser_price:asc"></el-option>
-                            <el-option label="计费率Z-A" value="in_advertiser_price:desc"></el-option>
-                            <el-option label="流量值A-Z" value="wave:asc"></el-option>
-                            <el-option label="流量值Z-A" value="wave:desc"></el-option>
-                        </el-select>
-                    </el-form-item>
-                    <!--
-                    <el-form-item>
-                        <el-select v-model="paramete.earning_day" placeholder="今日收益">
-                            <el-option label="收益大于  0元" value="1"></el-option>
-                            <el-option label="收益大于 10元" value="10"></el-option>
-                            <el-option label="收益大于 50元" value="50"></el-option>
-                            <el-option label="收益大于100元" value="100"></el-option>
-                        </el-select>
-                    </el-form-item>
-                    -->
-                    <el-form-item>
-                        <el-select v-model="paramete.grade" placeholder="等级筛选">
-                            <el-option label="一级" :value="1"></el-option>
-                            <el-option label="二级" :value="2"></el-option>
-                            <el-option label="三级" :value="3"></el-option>
-                            <el-option label="四级" :value="4"></el-option>
-                            <el-option label="五级" :value="5"></el-option>
-                        </el-select>
-                    </el-form-item>
-                    <el-form-item>
                         <el-input v-model="paramete.id" placeholder="广告ID"></el-input>
                     </el-form-item>
                     <el-form-item>
@@ -50,6 +23,29 @@
                         <el-select v-model="paramete.service_id" placeholder="客服查询">
                             <el-option label="全部客服" value=""></el-option>
                             <el-option v-for="item in group.services" :key="item.key" :label="item.nickname" :value="item.id"></el-option>
+                        </el-select>
+                    </el-form-item>
+                    <el-form-item>
+                        <el-select v-model="paramete.flow_pool_id" placeholder="流量池查询">
+                            <el-option label="选择全部" value=""></el-option>
+                            <el-option v-for="item in group.flowpools" :key="item.key" :label="item.name" :value="item.id"></el-option>
+                        </el-select>
+                    </el-form-item>
+                    <el-form-item>
+                        <el-select v-model="paramete.orderby" placeholder="广告排序">
+                            <el-option label="计费率A-Z" value="in_advertiser_price:asc"></el-option>
+                            <el-option label="计费率Z-A" value="in_advertiser_price:desc"></el-option>
+                            <el-option label="流量值A-Z" value="wave:asc"></el-option>
+                            <el-option label="流量值Z-A" value="wave:desc"></el-option>
+                        </el-select>
+                    </el-form-item>
+                    <el-form-item>
+                        <el-select v-model="paramete.grade" placeholder="等级筛选">
+                            <el-option label="一级" :value="1"></el-option>
+                            <el-option label="二级" :value="2"></el-option>
+                            <el-option label="三级" :value="3"></el-option>
+                            <el-option label="四级" :value="4"></el-option>
+                            <el-option label="五级" :value="5"></el-option>
                         </el-select>
                     </el-form-item>
                     <el-form-item>
@@ -103,38 +99,11 @@
                 </el-table-column>
 
                 <el-table-column
-                    label="联盟/客服"
-                    min-width="80">
-                    <template slot-scope="scope">
-                        <span v-for="item in group.alliance_agents" :key="item.key" v-if="item.id==scope.row.alliance_agent_id">{{item.name}}</span>
-                        <br/>
-                        <span v-for="item in group.services" :key="item.key" v-if="item.id==scope.row.service_id">{{item.nickname}}</span>
-                    </template>
-                </el-table-column>
-
-                <el-table-column
-                    label="IP评估"
-                    min-width="100">
-                    <template slot-scope="scope">
-                        {{scope.row.ip_point_time}}
-                        <br>
-                        {{scope.row.ip_point}} 分
-                    </template>
-                </el-table-column>
-
-                <el-table-column
                     label="站长名字"
-                    min-width="140">
+                    min-width="120">
                     <template slot-scope="scope">
-                        <router-link target="_blank" :to="'/admin/webmaster/'+scope.row.webmaster_id">{{scope.row.username}}</router-link>
-                    </template>
-                </el-table-column>
-
-                <el-table-column
-                    label="等级"
-                    min-width="60">
-                    <template slot-scope="scope">
-                        {{scope.row.grade}} 级
+                        <router-link target="_blank" style="white-space: nowrap;" :to="'/admin/webmaster/'+scope.row.webmaster_id">{{scope.row.username}}</router-link><br/>
+                        <span v-for="item in group.flowpools" :key="item.key" v-if="item.id==scope.row.flow_pool_id">{{item.name}}</span>
                     </template>
                 </el-table-column>
 
@@ -162,6 +131,25 @@
                     <template slot-scope="scope">
                         {{scope.row.out_advertiser_price}}/{{scope.row.in_advertiser_price}}<br/>
                         <span class="success" v-if="scope.row.is_disabled_advertiser_ad=='1'">限广告</span>
+                    </template>
+                </el-table-column>
+
+                <el-table-column
+                    label="暗层/强跳"
+                    min-width="100">
+                    <template slot-scope="scope">
+                        {{scope.row.hid_height}}-{{scope.row.hid_height_chance}}%
+                        <br/>
+                        {{scope.row.compel_skip}}%
+                    </template>
+                </el-table-column>
+
+                <el-table-column
+                    label="强点"
+                    min-width="100">
+                    <template slot-scope="scope">
+                        <span v-if="scope.row.compel_click=='1'">开启-{{scope.row.compel_chance}}%<br/>{{scope.row.compel_interval}}分钟</span>
+                        <span v-if="scope.row.compel_click!='1'">关闭</span>
                     </template>
                 </el-table-column>
 
@@ -265,7 +253,34 @@
                         </template>
                     </el-table-column>
                 </el-table-column>
-                
+
+                <el-table-column
+                    label="客服"
+                    min-width="60">
+                    <template slot-scope="scope">
+                        <span v-for="item in group.alliance_agents" :key="item.key" v-if="item.id==scope.row.alliance_agent_id">{{item.name}}</span>
+                        <br/>
+                        <span v-for="item in group.services" :key="item.key" v-if="item.id==scope.row.service_id">{{item.nickname}}</span>
+                    </template>
+                </el-table-column>
+
+                <el-table-column
+                    label="等级"
+                    min-width="60">
+                    <template slot-scope="scope">
+                        {{scope.row.grade}} 级
+                    </template>
+                </el-table-column>
+
+                <el-table-column
+                    label="IP评估"
+                    min-width="100">
+                    <template slot-scope="scope">
+                        {{scope.row.ip_point_time}}
+                        <br>
+                        {{scope.row.ip_point}} 分
+                    </template>
+                </el-table-column>
 
                 <el-table-column
                     label="状态"
@@ -287,10 +302,6 @@
                             <el-dropdown-menu slot="dropdown">
                                 <el-dropdown-item><router-link target="_blank" :to="'/admin/webmaster/earningday/'+scope.row.id">每天数据</router-link></el-dropdown-item>
                                 <el-dropdown-item><router-link target="_blank" :to="'/admin/webmaster/earningclick/'+scope.row.id">用户点击</router-link></el-dropdown-item>
-                                <el-dropdown-item><router-link target="_blank" :to="'/admin/stat/intervals/'+scope.row.id">间隔时间</router-link></el-dropdown-item>
-                                <el-dropdown-item><router-link target="_blank" :to="'/admin/stat/locations/'+scope.row.id">点击位置</router-link></el-dropdown-item>
-                                <el-dropdown-item><router-link target="_blank" :to="'/admin/stat/regions/'+scope.row.id">地区分布</router-link></el-dropdown-item>
-                                <el-dropdown-item><router-link target="_blank" :to="'/admin/stat/screens/'+scope.row.id">屏幕尺寸</router-link></el-dropdown-item>
                             </el-dropdown-menu>
                         </el-dropdown>
                     </template>

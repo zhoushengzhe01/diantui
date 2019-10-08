@@ -43,8 +43,8 @@ class Test extends Command
      */
     public function handle()
     {
-        HourToDayController::WebmasterDay();       //站长
-        HourToDayController::AdvertiserDay();      //广告主
+        OtherController::ip_point();
+        // HourToDayController::AdvertiserDay();      //广告主
     }
     
 }

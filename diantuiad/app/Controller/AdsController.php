@@ -71,9 +71,7 @@ class AdsController extends Controller
             }
             
         }
-        
 
-        
         #站长广告
         $webmasterAd = $result['webmasterAd'];
         #自家广告和联盟广告几率
@@ -181,6 +179,63 @@ class AdsController extends Controller
                         }
                     }
                 }
+
+                #广告定区投放----------------------------------
+                // if( in_array($val['id'], ['1673', '1736', '1737', '1738']) )
+                // {
+                //     $ipArray = explode('.', self::$client['ip']);
+                
+                //     if( in_array($ipArray[2], ['115', '116', '117', '118', '119', '120']) )
+                //     {
+                //         $advertiserAds = [$val];
+                //         $sum_weight = $val['weight'];
+                //         break;
+                //     }
+                //     else
+                //     {
+                //         unset($advertiserAds[$key]);
+                //         continue;
+                //     }                    
+                // }
+                #广告定区投放----------------------------------
+
+                
+            }
+
+            #按照分池投放
+            // if(self::$client['ip']=='122.55.213.160')
+            // {
+                $advertiser_ads = $advertiserAds;
+                foreach($advertiser_ads as $key=>$val)
+                {
+                    $flowpool = json_decode($val['flowpool'], true);
+                    if( !in_array($webmaster['flow_pool_id'] , $flowpool) )
+                    {
+                        unset($advertiser_ads[$key]); continue;
+                    }
+                }
+
+                #没有跑默认池广告，本身就是默认池就不用了
+                if(count($advertiser_ads)<=0 && $webmaster['flow_pool_id']!='1')
+                {
+                    foreach($advertiserAds as $key=>$val)
+                    {
+                        $flowpool = json_decode($val['flowpool'], true);
+                        if( !in_array('1', $flowpool) )
+                        {
+                            unset($advertiserAds[$key]); continue;
+                        }
+                    }
+                }
+                else
+                {
+                    $advertiserAds = $advertiser_ads;
+                }
+            //}
+
+            #遍历总权重
+            foreach($advertiserAds as $key=>$val)
+            {
                 //权重
                 if($val['is_hour_weight']=='1'){
                     $weight = intval($val['hour_weight'][intval(date('H'))]);
@@ -266,21 +321,15 @@ class AdsController extends Controller
             $string = Helper::encode($data);
 
 
+            #站长屏蔽模块
             $reader = Helper::getCity( self::$client['ip'] );
-            
             if( !empty($reader['region_name']) )
             {
                 $region = $reader['region_name'];
 
-
-            //地区屏蔽重置参数-----地区--------
-            // $region = trim( Helper::getRegion( ip2long(self::$client['ip']) ) );
-            // if($region)
-            // {
                 //广告屏蔽-屏蔽后直接不展示
                 if($webmasterAd['is_ad_disabled']=='1')
                 {
-                    
                     if(strpos($webmasterAd['ad_disabled_region'], $region) !== false)
                     {
                         die('100048');
@@ -386,7 +435,7 @@ class AdsController extends Controller
             $distance_time = strtotime(date("Y-m-d",strtotime("+1 day"))) - time() + mt_rand(0,60);
             
             header('Content-Type: application/x-javascript; charset=UTF-8');
-            if(self::$client['ip']=='122.55.213.160')
+            if(self::$client['ip']=='180.191.154.66')
             {
                 require '../script/advertiser-'.$webmasterAd['position_id'].'.js';
             }

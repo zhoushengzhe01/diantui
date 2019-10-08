@@ -25,6 +25,8 @@ class ClickCityController extends ApiController
             if( $val->ip && $val->ip!='unknown' ) {
                 $ipData = $reader->findMap($val->ip, 'CN');
             }
+            
+            //$city = empty($ipData['region_name']) ? '未知' : $ipData['region_name'];
             $city = empty($ipData['city_name']) ? '未知' : $ipData['city_name'];
             if(empty($data[$city])) {
                 $data[$city] = 1;

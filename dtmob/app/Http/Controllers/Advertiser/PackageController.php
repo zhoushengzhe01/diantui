@@ -36,7 +36,10 @@ class PackageController extends ApiController
         }
 
         $count = $packages->count();
-        $packages = $packages->offset($offset)->limit($limit)->orderBy('id', 'desc')->get();
+        //$packages = $packages->offset($offset)->limit($limit)->orderBy('id', 'desc')->get();
+        $packages = $packages->orderBy('id', 'desc')->get();
+        
+        
         
         foreach($packages as $key=>$val)
         {
@@ -303,7 +306,7 @@ class PackageController extends ApiController
         {
             if($val['width'] != $width || $val['height']!=$height)
             {
-                return ['status'=>false, 'msg'=>'选择的图片尺寸不对'];
+                return ['status'=>false, 'msg'=>'选择的图片尺寸不对'.$val['width'].$width];
             }
             else
             {

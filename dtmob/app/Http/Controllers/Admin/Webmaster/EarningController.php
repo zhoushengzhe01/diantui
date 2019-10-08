@@ -23,23 +23,27 @@ class EarningController extends ApiController
 
         $offset = trim($request->input('offset'));
         $limit = trim($request->input('limit'));
-        if(empty($limit))
-        {
-            $limit = 10;
+        if(empty($limit)){
+            $limit = 20;
         }
 
         $earnings = EarningDay::where('webmaster_ad_id', '=', $webmaster_ad_id);
 
         $count = $earnings->count();
+        $max_pv_number = $earnings->max('pv_number');
+        $max_ip_number = $earnings->max('ip_number');
+        $max_pc_number = $earnings->max('pc_number');
         $earnings = $earnings->orderBy('id', 'desc')->offset($offset)->limit($limit)->get();
 
         $data = [
             'count'=>$count,
+            'max_pv_number'=>$max_pv_number,
+            'max_ip_number'=>$max_ip_number,
+            'max_pc_number'=>$max_pc_number,
             'earnings'=>$earnings,
         ];
 
         return response()->json(['data'=>$data], 200);
-
     }
 
     public function putEarningDay(Request $request, $id)

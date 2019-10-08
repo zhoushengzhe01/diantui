@@ -278,6 +278,13 @@ Route::group(['prefix' => 'admin', 'namespace' => 'Admin'], function (){
         Route::get('alliance/flux/expends/day.json', 'Alliance\FluxExpendController@getExpendsDay');
         Route::get('alliance/flux/expends/hour.json', 'Alliance\FluxExpendController@getExpendsHour');
 
+    ##流量池
+        Route::get('alliance/flowpools.json', 'Alliance\FlowpoolController@getFlowpools');
+        Route::get('alliance/flowpool/{id}.json', 'Alliance\FlowpoolController@getFlowpool');
+        Route::post('alliance/flowpool.json', 'Alliance\FlowpoolController@postFlowpool');
+        Route::put('alliance/flowpool/{id}.json', 'Alliance\FlowpoolController@putFlowpool');
+    
+
     ##代理
         Route::get('agent/agents.json', 'Agent\AgentController@getAgents');
         Route::get('agent/agent/{id}.json', 'Agent\AgentController@getAgent');

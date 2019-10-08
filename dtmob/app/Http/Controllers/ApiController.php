@@ -115,8 +115,6 @@ class ApiController extends BaseController
     {
         $user_id = Session::get('user_id');
         $user_name = Session::get('user_name');
-        $user_id = 10;
-        $user_name = 'dtmob';
 
         if(empty($user_id) || empty($user_name))
         {

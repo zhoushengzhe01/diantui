@@ -7,6 +7,7 @@ use App\Http\Controllers\ApiController;
 use App\Model\AdsPosition;
 use App\Model\AdvertiserAds;
 use App\Service\AdvertiserExpendService;
+use App\Model\Flowpool;
 
 use Hash;
 use Excel;
@@ -28,6 +29,8 @@ class AdController extends ApiController
         $state = trim($request->input('state'));
         $id = trim($request->input('id'));
         $username = trim($request->input('username'));
+        $flowpool = trim($request->input('flowpool'));
+        
 
         $offset = trim($request->input('offset'));
         $limit = trim($request->input('limit'));
@@ -80,6 +83,9 @@ class AdController extends ApiController
         if(!empty($username)) {
             $ads = $ads->where('adv.username', 'like', '%'.$username.'%');
         }
+        if(!empty($flowpool)) {
+            $ads = $ads->where('advertiser_ads.flowpool', 'like', '%'.$flowpool.'%');
+        }
 
         $count = $ads->count();
         $ads = $ads->orderBy('advertiser_ads.expend_day', 'desc')->offset($offset)->limit($limit)->get();
@@ -87,11 +93,16 @@ class AdController extends ApiController
         #查找收益
         foreach($ads as $key=>$val)
         {
-            $ads[$key]['day'] = (new AdvertiserExpendService)->getEarning(0, $val->id, 0, 0, self::$user);
+            $ads[$key]['day'] = (new AdvertiserExpendService)->getEarning(0, $val->id, 0, 0, self::$user, $username, $flowpool);
+            
+            $ads[$key]['flowpool'] = json_decode($val->flowpool, true);
+            if(gettype($ads[$key]['flowpool'])!='array'){
+                $ads[$key]['flowpool'] = [];
+            }
         }
 
         #查找总收益
-        $all_earning = (new AdvertiserExpendService)->getEarning($advertiser_id, $id, $adstype_id, 0, self::$user);
+        $all_earning = (new AdvertiserExpendService)->getEarning($advertiser_id, $id, $adstype_id, 0, self::$user, $username, $flowpool);
 
         $data = [
             'all_earning'=>$all_earning,
@@ -114,6 +125,11 @@ class AdController extends ApiController
         
         if(empty($ad)){
             return response()->json(['message'=>'未找到数据'], 300);
+        }
+
+        $ad->flowpool = json_decode($ad->flowpool, true);
+        if(gettype($ad->flowpool)!='array'){
+            $ad->flowpool = [];
         }
 
         if(!empty($ad->hour_weight)){
@@ -175,6 +191,8 @@ class AdController extends ApiController
         if(!empty($present['in_price'])){ $ad->in_price = trim($present['in_price']); }
         if(!empty($present['weight'])){ $ad->weight = trim($present['weight']); }
         if(!empty($present['client']) || $present['client']=='0'){ $ad->client = trim($present['client']); }
+        if(!empty($present['flowpool'])){ $ad->flowpool = json_encode($present['flowpool'], true); }
+
         $ad->put_type = $present['put_type'];
         $ad->is_put_webmaster = $present['is_put_webmaster'];
         $ad->put_webmasters = empty($present['put_webmasters']) ? '' : trim($present['put_webmasters']);
@@ -386,47 +404,57 @@ class AdController extends ApiController
     {
         self::Admin();
 
-        $type = AdsPosition::where('state', '=', '1')->get(['id', 'name']);
+        #分池数据
+        $data = Flowpool::where('state', '=', '1')->orderBy('sort', 'asc')->get(['id', 'name']);
 
-        if(count($type)>0)
+        foreach($data as $k=>$v)
         {
-            foreach($type as $key=>$vel)
+            $type = AdsPosition::where('state', '=', '1')->get(['id', 'name']);
+
+            if(count($type)>0)
             {
-                $adnumber = [];
-
-                if($vel['id']=='14')
+                foreach($type as $key=>$vel)
                 {
-                    //wap-android
-                    $type[$key]->wapandroid = AdvertiserAds::where('state', '=', '1')->where('is_put_return_ad', '=', '1')->where('is_wechat', '0')->whereIn('client',['2','0'])->where('is_put_webmaster', '0')->count();
+                    $adnumber = [];
 
-                    //wap-ios
-                    $type[$key]->wapios = AdvertiserAds::where('state', '=', '1')->where('is_put_return_ad', '=', '1')->where('is_wechat', '0')->whereIn('client',['1','0'])->where('is_put_webmaster', '0')->count();
+                    #这里是返回
+                    if($vel['id']=='14')
+                    {
+                        //wap-android
+                        $type[$key]->wapandroid = AdvertiserAds::where('state', '=', '1')->where('flowpool', 'like', '%'.$v->id.'%')->where('is_put_return_ad', '=', '1')->where('is_wechat', '0')->whereIn('client',['2','0'])->where('is_put_webmaster', '0')->count();
 
-                    //微信-android
-                    $type[$key]->wechatandroid = AdvertiserAds::where('state', '=', '1')->where('is_put_return_ad', '=', '1')->where('is_wechat', '1')->whereIn('client',['2','0'])->where('is_put_webmaster', '0')->count();
+                        //wap-ios
+                        $type[$key]->wapios = AdvertiserAds::where('state', '=', '1')->where('flowpool', 'like', '%'.$v->id.'%')->where('is_put_return_ad', '=', '1')->where('is_wechat', '0')->whereIn('client',['1','0'])->where('is_put_webmaster', '0')->count();
 
-                    //微信-ios
-                    $type[$key]->wechatios = AdvertiserAds::where('state', '=', '1')->where('is_put_return_ad', '=', '1')->where('is_wechat', '1')->whereIn('client',['1','0'])->where('is_put_webmaster', '0')->count();
+                        //微信-android
+                        $type[$key]->wechatandroid = AdvertiserAds::where('state', '=', '1')->where('flowpool', 'like', '%'.$v->id.'%')->where('is_put_return_ad', '=', '1')->where('is_wechat', '1')->whereIn('client',['2','0'])->where('is_put_webmaster', '0')->count();
+
+                        //微信-ios
+                        $type[$key]->wechatios = AdvertiserAds::where('state', '=', '1')->where('flowpool', 'like', '%'.$v->id.'%')->where('is_put_return_ad', '=', '1')->where('is_wechat', '1')->whereIn('client',['1','0'])->where('is_put_webmaster', '0')->count();
+                    }
+                    else
+                    {
+                        //wap-android
+                        $type[$key]->wapandroid = AdvertiserAds::where('adstype_id', '=', $vel['id'])->where('flowpool', 'like', '%'.$v->id.'%')->where('state', '=', '1')->where('is_put_return_ad', '=', '0')->where('is_wechat', '0')->whereIn('client',['2','0'])->where('is_put_webmaster', '0')->count();
+
+                        //wap-ios
+                        $type[$key]->wapios = AdvertiserAds::where('adstype_id', '=', $vel['id'])->where('flowpool', 'like', '%'.$v->id.'%')->where('state', '=', '1')->where('is_put_return_ad', '=', '0')->where('is_wechat', '0')->whereIn('client',['1','0'])->where('is_put_webmaster', '0')->count();
+
+                        //微信-android
+                        $type[$key]->wechatandroid = AdvertiserAds::where('adstype_id', '=', $vel['id'])->where('flowpool', 'like', '%'.$v->id.'%')->where('state', '=', '1')->where('is_put_return_ad', '=', '0')->where('is_wechat', '1')->whereIn('client',['2','0'])->where('is_put_webmaster', '0')->count();
+
+                        //微信-ios
+                        $type[$key]->wechatios = AdvertiserAds::where('adstype_id', '=', $vel['id'])->where('flowpool', 'like', '%'.$v->id.'%')->where('state', '=', '1')->where('is_put_return_ad', '=', '0')->where('is_wechat', '1')->whereIn('client',['1','0'])->where('is_put_webmaster', '0')->count();
+                    }
+
                 }
-                else
-                {
-                    //wap-android
-                    $type[$key]->wapandroid = AdvertiserAds::where('adstype_id', '=', $vel['id'])->where('state', '=', '1')->where('is_put_return_ad', '=', '0')->where('is_wechat', '0')->whereIn('client',['2','0'])->where('is_put_webmaster', '0')->count();
-
-                    //wap-ios
-                    $type[$key]->wapios = AdvertiserAds::where('adstype_id', '=', $vel['id'])->where('state', '=', '1')->where('is_put_return_ad', '=', '0')->where('is_wechat', '0')->whereIn('client',['1','0'])->where('is_put_webmaster', '0')->count();
-
-                    //微信-android
-                    $type[$key]->wechatandroid = AdvertiserAds::where('adstype_id', '=', $vel['id'])->where('state', '=', '1')->where('is_put_return_ad', '=', '0')->where('is_wechat', '1')->whereIn('client',['2','0'])->where('is_put_webmaster', '0')->count();
-
-                    //微信-ios
-                    $type[$key]->wechatios = AdvertiserAds::where('adstype_id', '=', $vel['id'])->where('state', '=', '1')->where('is_put_return_ad', '=', '0')->where('is_wechat', '1')->whereIn('client',['1','0'])->where('is_put_webmaster', '0')->count();
-                }
-
             }
+
+            $data[$k]['number'] = $type;
         }
 
-        return response()->json(['data'=>$type], 200);
+    
+        return response()->json(['data'=>$data], 200);
     }
 
     public function uploadImg(Request $request, $id) {      

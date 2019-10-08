@@ -26,6 +26,7 @@ import Alliance from 	'./views/alliance/alliance.vue'
 import Spendings from 	'./views/alliance/spendings.vue'
 import AllianceFluxs from 	'./views/alliance/fluxs.vue'
 import AllianceFluxExpends from	'./views/alliance/fluxexpends.vue'
+import AllianceFlowpools from	'./views/alliance/flowpools.vue'
 
 //广告主
 import Advertisers from 		'./views/advertiser/advertisers.vue'
@@ -151,6 +152,9 @@ export default new Router({
 		},{
 			path: '/admin/alliance/spendings',
 			component: Spendings
+		},{
+			path: '/admin/alliance/flowpools',
+			component: AllianceFlowpools
 		},{
 			path: '/admin/alliance/:id',
 			component: Alliance

@@ -27,12 +27,13 @@ class AdsController extends ApiController
         $offset = trim($request->input('offset'));
         $limit = trim($request->input('limit'));
         $username = trim($request->input('username'));
+        $flow_pool_id = trim($request->input('flow_pool_id'));
         if(empty($limit))
         {
             $limit = 10;
         }
 
-        $ads = WebmasterAds::select('webmaster_ads.*', 'webmaster.username', 'webmaster.grade', 'webmaster.alliance_agent_id', 'webmaster.service_id')
+        $ads = WebmasterAds::select('webmaster_ads.*', 'webmaster.username', 'webmaster.flow_pool_id', 'webmaster.grade', 'webmaster.alliance_agent_id', 'webmaster.service_id')
             ->join('webmaster', 'webmaster.id','=','webmaster_ads.webmaster_id');
 
         #联盟权限限制
@@ -51,6 +52,9 @@ class AdsController extends ApiController
         }
         if(!empty($username)) {
             $ads = $ads->where('webmaster.username', 'like', '%'.$username.'%');
+        }
+        if(!empty($flow_pool_id)) {
+            $ads = $ads->where('webmaster.flow_pool_id', $flow_pool_id);
         }
         if(!empty($service_id)){
             $ads = $ads->where('webmaster.service_id', '=', $service_id);
@@ -77,10 +81,10 @@ class AdsController extends ApiController
         ##查找收益
         foreach($ads as $key=>$val)
         {
-            $ads[$key]['day'] = (new EarningService)->getEarning('', $val->id, '', '', self::$user);
+            $ads[$key]['day'] = (new EarningService)->getEarning('', $val->id, '', '', self::$user, $username, $flow_pool_id);
         }
 
-        $all_earning = (new EarningService)->getEarning($webmaster_id, $id, $position_id, '', self::$user);
+        $all_earning = (new EarningService)->getEarning($webmaster_id, $id, $position_id, '', self::$user, $username, $flow_pool_id);
         
         $data = [
             'all_earning'=>$all_earning,

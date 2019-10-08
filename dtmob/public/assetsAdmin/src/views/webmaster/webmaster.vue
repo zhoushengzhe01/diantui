@@ -32,6 +32,13 @@
                             </el-select>
                         </el-form-item>
                     </el-col>
+                    <el-col :span="12">
+                        <el-form-item label="流量分池">
+                            <el-select v-model="data.webmaster.flow_pool_id" placeholder="流量池" style="width:100%">
+                                <el-option v-for="item in group.flowpools" :key="item.key" :label="item.name" :value="item.id"></el-option>
+                            </el-select>
+                        </el-form-item>
+                    </el-col>
                 </el-row>
                 
                 <!--推荐人信息-->

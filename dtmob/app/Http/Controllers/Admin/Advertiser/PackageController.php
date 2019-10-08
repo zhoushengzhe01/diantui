@@ -47,7 +47,8 @@ class PackageController extends ApiController
         }
 
         $count = $packages->count();
-        $packages = $packages->orderBy('matter_package.id', 'desc')->offset($offset)->limit($limit)->get();
+        //$packages = $packages->orderBy('matter_package.id', 'desc')->offset($offset)->limit($limit)->get();
+        $packages = $packages->orderBy('matter_package.id', 'desc')->get();
 
         foreach($packages as $key=>$val)
         {
