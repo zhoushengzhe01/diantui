@@ -271,6 +271,7 @@ class AdsController extends ApiController
             $priceLogs->in_advertiser_price = $present['in_advertiser_price'];
             $priceLogs->out_advertiser_price = $present['out_advertiser_price'];
             $priceLogs->hid_height_chance = $present['hid_height_chance'];
+            $priceLogs->ad_id = $id;
             $priceLogs->username = self::$user->username;
             $priceLogs->ip = $request->getClientIp();
             $logBool = $priceLogs->save();
