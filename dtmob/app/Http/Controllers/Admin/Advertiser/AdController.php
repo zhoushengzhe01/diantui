@@ -6,6 +6,7 @@ use App\Http\Controllers\ApiController;
 
 use App\Model\AdsPosition;
 use App\Model\AdvertiserAds;
+use App\Model\Agents;
 use App\Service\AdvertiserExpendService;
 use App\Model\Flowpool;
 
@@ -39,7 +40,7 @@ class AdController extends ApiController
             $limit = 10;
         }
         
-        $ads = AdvertiserAds::select('advertiser_ads.*', 'adv.username', 'adv.alliance_agent_id', 'adv.busine_id')
+        $ads = AdvertiserAds::select('advertiser_ads.*', 'adv.username', 'adv.money', 'adv.agent_id', 'adv.alliance_agent_id', 'adv.busine_id')
             ->join('advertiser as adv', 'adv.id','=','advertiser_ads.advertiser_id');
 
         #联盟权限限制
@@ -93,8 +94,21 @@ class AdController extends ApiController
         #查找收益
         foreach($ads as $key=>$val)
         {
+            #代理反点
+            if( !empty($val->agent_id) )
+            {
+                $agent = Agents::where('id', $val->agent_id)->first();
+                $ads[$key]['return_point'] = $agent->return_point;
+            }
+            else
+            {
+                $ads[$key]['return_point'] = 0;
+            }
+
+            $ads[$key]['money'] = intval($val->money);
+
             $ads[$key]['day'] = (new AdvertiserExpendService)->getEarning(0, $val->id, 0, 0, self::$user, $username, $flowpool);
-            
+
             $ads[$key]['flowpool'] = json_decode($val->flowpool, true);
             if(gettype($ads[$key]['flowpool'])!='array'){
                 $ads[$key]['flowpool'] = [];

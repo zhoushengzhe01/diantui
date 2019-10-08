@@ -105,9 +105,7 @@
                         <a href="" @click.prevent="exportAdvertiser(scope.row.s_date)">导出产品</a>
                     </template>
                 </el-table-column>
-            
             </el-table>
-        
         </div>
 
         <div class="box" v-loading="loading">
@@ -131,11 +129,20 @@
                 </el-table-column>
 
                 <el-table-column
-                    label="商务"
+                    label="广告主/商务"
                     min-width="100">
                     <template slot-scope="scope">
-                        <router-link target="_blank" :to="'/admin/advertiser/ad/'+scope.row.advertiser_id">{{scope.row.username}}</router-link> <br/>
+                        <router-link target="_blank" :to="'/admin/advertiser/'+scope.row.advertiser_id">{{scope.row.username}}</router-link> <br/>
                         <span v-for="item in group.busines" :key="item.key" v-if="item.id==scope.row.busine_id">{{item.nickname}}</span>
+                    </template>
+                </el-table-column>
+
+                <el-table-column
+                    label="余额/返点"
+                    min-width="100">
+                    <template slot-scope="scope">
+                        <span class="info">{{scope.row.money}} 元</span> <br/>
+                        <span class="info">返: </span>{{scope.row.return_point}}%
                     </template>
                 </el-table-column>
 

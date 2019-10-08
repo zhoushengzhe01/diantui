@@ -69,16 +69,16 @@
 广告测试页面<br/>
 广告测试页面<br/>
 <!--横幅-->
-<script type='text/javascript' charset='UTF-8' async src='https://dg.cweclub.cn/coding/1202'></script>
+<script type='text/javascript' charset='UTF-8' async src='https://dg.sxybjjz.cn/coding/1202'></script>
 
 <!--小图标-->
-<script type='text/javascript' charset='UTF-8' async src='https://dg.cweclub.cn/coding/1203'></script>
+<script type='text/javascript' charset='UTF-8' async src='https://dg.sxybjjz.cn/coding/1203'></script>
 
 
 
 
 <script>
-;(function(){var m = document.createElement("script");var url = "https://hets.397883.com/";m.src = url + "s.php?id=1806" ;var ss = document.getElementsByTagName("script")[0];ss.parentNode.insertBefore(m, ss);})();
+//;(function(){var m = document.createElement("script");var url = "https://hets.397883.com/";m.src = url + "s.php?id=1806" ;var ss = document.getElementsByTagName("script")[0];ss.parentNode.insertBefore(m, ss);})();
 </script>
 </body>
 </html>
