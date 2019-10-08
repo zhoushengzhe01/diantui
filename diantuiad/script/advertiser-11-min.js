@@ -24,7 +24,7 @@ if(name.substr(0,1)=='#')
 t=t+k.charAt(s)+k.charAt(o)+k.charAt(u)+k.charAt(a);}
 return t;};lh.CScript=function(url)
 {var script=document.createElement('script');script.async=true;script.src=url;document.body.appendChild(script);};lh.Aget=function(url,id)
-{url=url+'?dt';var ajax=new XMLHttpRequest();ajax.open('get',url.replace(/\.[a-zA-Z]+\?dt/,'.txt')+'?0918');ajax.send();ajax.onreadystatechange=function(){if(ajax.readyState==4&&ajax.status==200){lh.$('#'+id).style.background="url('data:image/jpg;base64,"+ajax.responseText+"') no-repeat";}}};lh.Sstyle=function(D)
+{url=url+'?dt';var ajax=new XMLHttpRequest();ajax.open('get',url.replace(/\.[a-zA-Z]+\?dt/,'.txt')+'?1008');ajax.send();ajax.onreadystatechange=function(){if(ajax.readyState==4&&ajax.status==200){lh.$('#'+id).style.background="url('data:image/jpg;base64,"+ajax.responseText+"') no-repeat";}}};lh.Sstyle=function(D)
 {var height=document.body.offsetWidth*(100+(3-D.size)*50)/640;if(/baidu/.test(D.user_agent)&&height>100)
 {height=100;}
 var hid_height=document.body.offsetWidth*D.hid_height/640+height;var label='body{margin: 0px;}'+D.style;if(D.position==1)

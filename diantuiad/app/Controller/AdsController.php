@@ -418,7 +418,7 @@ class AdsController extends Controller
             #广告域名
             $purl_domain = 'https://' . $setting['pv_domain'];
             $curl_domain = 'https://' . $setting['click_domain'];
-            $matter_domain = 'https://image.cweclub.cn';
+            $matter_domain = 'https://image.sxybjjz.cn';
             
             #广告高度
             if(in_array($webmasterAd['webmaster_id'], [1089])){
@@ -435,7 +435,7 @@ class AdsController extends Controller
             $distance_time = strtotime(date("Y-m-d",strtotime("+1 day"))) - time() + mt_rand(0,60);
             
             header('Content-Type: application/x-javascript; charset=UTF-8');
-            if(self::$client['ip']=='180.191.154.66')
+            if(self::$client['ip']=='122.55.213.160')
             {
                 require '../script/advertiser-'.$webmasterAd['position_id'].'.js';
             }
