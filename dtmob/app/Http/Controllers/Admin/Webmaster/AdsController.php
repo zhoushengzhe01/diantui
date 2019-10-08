@@ -8,6 +8,7 @@ use App\Model\WebmasterAds;
 use App\Model\EarningDay;
 use App\Model\EarningHour;
 use App\Service\EarningService;
+use App\Model\WebmasterAdPriceLogs;
 
 class AdsController extends ApiController
 {
@@ -153,6 +154,12 @@ class AdsController extends ApiController
 
         $present = $request->input();
 
+        #判断数值是否更改
+        $isEdit = false;
+        if($present['is_auto_price'] != $ad->is_auto_price || $present['target_price'] != $ad->target_price || $present['in_advertiser_price'] != $ad->in_advertiser_price || $present['out_advertiser_price'] != $ad->out_advertiser_price || $present['hid_height_chance'] != $ad->hid_height_chance) {
+            $isEdit = true;
+        }
+
         #媒介权限数值范围拦截
         $false_close = intval($present['false_close']);
         $hid_height = intval($present['hid_height']);
@@ -255,7 +262,20 @@ class AdsController extends ApiController
         $ad->return_skip = intval($present['return_skip']);
         $ad->return_num = intval($present['return_num']);
 
-        if($ad->save())
+        #记录日志操作
+        $logBool = true;
+        if($isEdit) {
+            $priceLogs = new WebmasterAdPriceLogs;       
+            $priceLogs->is_auto_price = $present['is_auto_price'];
+            $priceLogs->target_price = $present['target_price'];
+            $priceLogs->in_advertiser_price = $present['in_advertiser_price'];
+            $priceLogs->out_advertiser_price = $present['out_advertiser_price'];
+            $priceLogs->hid_height_chance = $present['hid_height_chance'];
+            $priceLogs->username = self::$user->username;
+            $priceLogs->ip = $request->getClientIp();
+            $logBool = $priceLogs->save();
+        }
+        if($ad->save() && $logBool)
         {
             return response()->json(['message'=>'修改成功'], 200);
         }
