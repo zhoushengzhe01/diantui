@@ -130,6 +130,7 @@ class WebsiteController extends Controller
     //关于我们
     public function getAbout(Request $request)
     {
+        error_reporting(0);
         $data = [
             'title'=>'关于我们',
             'group'=>self::$group,

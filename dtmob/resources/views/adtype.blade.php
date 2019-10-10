@@ -16,13 +16,14 @@
 广告测试页面<br/>
 广告测试页面<br/>
 广告测试页面<br/>
-<a href="https://dtmob.hutaotao.cn/adtype?123">广告测试页面</a><br/>
+<a target="_blank" href="https://dtmob.hutaotao.cn/adtype?123">广告测试页面</a><br/>
 
+<a target="_blank" href="https://cj1.oulvoudeng.com/">天子链接</a><br/>
 <a href="https://cj1.oulvoudeng.com/">天子链接</a><br/>
 <br/>
 <br/>
 <br/>
-<a href="https://qu3.jinpu5.com/1697.html">广告测试页面</a><br/>
+<a target="_blank" href="https://qu3.jinpu5.com/1697.html">广告测试页面</a><br/>
 广告测试页面<br/>广告测试页面<br/>
 广告测试页面<br/>
 广告测试页面<br/>

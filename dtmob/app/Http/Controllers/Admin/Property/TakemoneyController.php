@@ -20,6 +20,10 @@ class TakemoneyController extends ApiController
         $start_date = trim($request->get('start_date'));
         $stop_date = trim($request->get('stop_date'));
         $webmaster_id = trim($request->input('webmaster_id'));
+        $username = trim($request->input('username'));
+        $bank_account = trim($request->input('bank_account'));
+        $bank_branch = trim($request->input('bank_branch'));
+        $bank_card = trim($request->input('bank_card'));
         $offset = trim($request->input('offset'));
         $limit = trim($request->input('limit'));
         if(empty($limit))
@@ -44,6 +48,18 @@ class TakemoneyController extends ApiController
 
         if(!empty($webmaster_id)){
             $moneys = $moneys->where('webmaster_money.webmaster_id', '=', $webmaster_id);
+        }
+        if(!empty($username)){
+            $moneys = $moneys->where('webmaster.username', 'like', '%'.$username.'%');
+        }
+        if(!empty($bank_account)){
+            $moneys = $moneys->where('webmaster_money.bank_account', 'like', '%'.$bank_account.'%');
+        }
+        if(!empty($bank_branch)){
+            $moneys = $moneys->where('webmaster_money.bank_branch', 'like', '%'.$bank_branch.'%');
+        }
+        if(!empty($bank_card)){
+            $moneys = $moneys->where('webmaster_money.bank_card', 'like', '%'.$bank_card.'%');
         }
 
         $count = $moneys->count();

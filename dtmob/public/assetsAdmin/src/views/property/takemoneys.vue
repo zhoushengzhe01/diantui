@@ -32,6 +32,18 @@
                     <el-form-item>
                         <el-input v-model="paramete.webmaster_id" placeholder="站长ID"></el-input>
                     </el-form-item>
+                    <el-form-item>
+                        <el-input v-model="paramete.username" placeholder="站长用户名"></el-input>
+                    </el-form-item>
+                    <el-form-item>
+                        <el-input v-model="paramete.bank_account" placeholder="开户人"></el-input>
+                    </el-form-item>
+                    <el-form-item>
+                        <el-input v-model="paramete.bank_branch" placeholder="所属支行"></el-input>
+                    </el-form-item>
+                    <el-form-item>
+                        <el-input v-model="paramete.bank_card" placeholder="银行卡号"></el-input>
+                    </el-form-item>
                     
                     <el-form-item>
                         <el-button type="success" @click="getTakemoneys">查询</el-button>

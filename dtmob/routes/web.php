@@ -334,8 +334,6 @@ Route::group(['prefix' => 'admin', 'namespace' => 'Admin'], function (){
     Route::put('department/{id}.json', 'DepartmentController@putDepartment')->where('id', '[0-9]+');
     Route::post('department.json', 'DepartmentController@postDepartment');
 
-    
-
     #系统设置
     Route::get('setting.json', 'SettingController@getSetting');
     Route::put('setting.json', 'SettingController@putSetting');
