@@ -205,6 +205,7 @@ Route::group(['prefix' => 'admin', 'namespace' => 'Admin'], function (){
         Route::get('webmaster/ads.json', 'Webmaster\AdsController@getAds');
         Route::get('webmaster/ad/{id}.json', 'Webmaster\AdsController@getAd')->where('id', '[0-9]+');
         Route::put('webmaster/ad/{id}.json', 'Webmaster\AdsController@putAd')->where('id', '[0-9]+');
+        Route::get('webmaster/pricelogs/{id}.json', 'Webmaster\PricelogController@getLogs')->where('id', '[0-9]+');
         //网站
         Route::get('webmaster/websites.json', 'Webmaster\WebsiteController@getWebsites');
         Route::get('webmaster/website/{id}.json', 'Webmaster\WebsiteController@getWebsite')->where('id', '[0-9]+');

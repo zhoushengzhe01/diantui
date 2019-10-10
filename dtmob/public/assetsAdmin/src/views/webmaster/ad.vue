@@ -456,16 +456,73 @@
                             </el-select>
                         </el-form-item>
                     </el-col>
-                </el-row>
-
+                </el-row>  
+                <el-row class="box-item" v-if="priceLog.count > 0">
+                    <div class="box-title">
+                        <div class="title-item">日志记录</div>
+                    </div>   
+                    <div class="box" v-loading="logloading" style="max-width: 800px;" label-position="right">
+                        <el-table :data="priceLog.data" style="width: 100%">
+                            <el-table-column
+                                prop="username"
+                                label="用户名"
+                                min-width="100">
+                            </el-table-column>
+                            <el-table-column
+                                label="自动调节"
+                                min-width="100">
+                                <template slot-scope="scope">
+                                    <span v-if="scope.row.is_auto_price == 0">关闭</span>
+                                    <span v-if="scope.row.is_auto_price == 1">启动</span>
+                                </template>
+                            </el-table-column>
+                            <el-table-column
+                                prop="target_price"
+                                label="目标万IP"
+                                min-width="80">
+                            </el-table-column>
+                            <el-table-column
+                                prop="in_advertiser_price"
+                                label="广告计费"
+                                min-width="80">
+                            </el-table-column>
+                            <el-table-column
+                                prop="out_advertiser_price"
+                                label="站长计费"
+                                min-width="80">
+                            </el-table-column>
+                            <el-table-column
+                                prop="hid_height_chance"
+                                label="暗层计费"
+                                min-width="80">
+                            </el-table-column>
+                            <el-table-column
+                                prop="ip"
+                                label="IP地址"
+                                min-width="100">
+                            </el-table-column>                    
+                            <el-table-column
+                                prop="created_at"
+                                label="时间"
+                                min-width="160">
+                            </el-table-column>
+                        </el-table>
+                        <div class="page-box">
+                            <el-pagination
+                            @current-change="pageChange"
+                            layout="total, prev, pager, next"
+                            :page-size="logparamete.limit"
+                            :total="priceLog.count">
+                            </el-pagination>
+                        </div>
+                    </div>               
+                </el-row> 
                 <el-form-item>
                     <el-button type="success" @click="putWebmasterad">确定</el-button>
                     <el-button>取消</el-button>
                 </el-form-item>
             </el-form>
         </div>
-
-
     </div>
 </template>
 <script>
@@ -479,11 +536,19 @@ export default {
             data: {
                 webmasterad: {}
             },
+
+            logloading: false,
+            logparamete: {
+                offset: 0,
+                limit: 10,
+            },
+            priceLog: {},
         };
     },
     created: function () {
         this.group.page = '/admin/webmaster/ads';
         this.getWebmasterad();
+        this.getAdPriceLog();
     },
     methods:{
         isShow: function(id,adtype)
@@ -529,6 +594,20 @@ export default {
                 //Th.$router.push({path:'/admin/webmaster/ads'});
 
             }, function(type, message){ Th.loading = false; Th.$emit('message', type, message); });
+        },
+        getAdPriceLog: function(){
+            var Th = this;
+            Th.logloading = true;
+            Th.$api.get('admin/webmaster/pricelogs/'+Th.id+'.json', Th.logparamete, function(data)
+            {
+                Th.priceLog = data;
+                Th.logloading = false;
+
+            }, function(type, message){ Th.logloading = false; Th.$emit('message', type, message); });
+        },
+        pageChange: function(val) {
+            this.logparamete.offset = parseInt(val-1) * parseInt(this.logparamete.limit);
+            this.getNodes();
         },
     },
 }
