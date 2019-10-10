@@ -237,7 +237,7 @@ class StatisController extends Controller
         if( (Helper::getClient()=='wechat') && $data['is_wechat_out_skip']=='1')
         {
             #处理安全跳转
-            $time = time();
+            $time = date('Ymd');
             $secretkey = md5(md5($time.'&dtmob@123'));
             
             $string =  Helper::encode([urlencode($link), $data['is_wechat_cover'], $time, $secretkey, $advertiser_ad_id]);

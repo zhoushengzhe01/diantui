@@ -60,27 +60,6 @@
             }
         }
 
-
-        var ip = lh.getCookie('is_repeat_ip_'+D.adid);
-        var num = 1;
-        if( ip )
-        {
-            if(ip.indexOf(D.ip2long)>-1)
-            {
-                var num = 5;
-            }
-            else
-            {
-              
-                ip = ip+':'+D.ip2long;
-                lh.setCookie('is_repeat_ip_'+D.adid, ip, D.dis_time);
-            }
-        }else{
-
-            ip = D.ip2long;
-            lh.setCookie('is_repeat_ip_'+D.adid, ip, D.dis_time);
-        }
-
         if(parseInt(Math.random() * 100) < (100/num))
         {
             var url = D.purl+"/pv?se=" + D.string;

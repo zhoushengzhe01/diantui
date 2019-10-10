@@ -10,7 +10,6 @@ class WeixinController
     //普通广告
     public function getWeixin()
     {
-
         if( !empty($_GET['string']) )
         {
             $date = Helper::decode($_GET['string']);
@@ -28,13 +27,13 @@ class WeixinController
             $advertiser_ad_id = $date[4];
 
             #限时访问
-            if(time() > ($time+120))
-            {
-                if($time!=123)
-                {
-                    die;
-                }   
-            }
+            // if(time() > ($time+120))
+            // {
+            //     if($time!=123)
+            //     {
+            //         die;
+            //     }   
+            // }
 
             #加密验证
             if(md5(md5($time.'&dtmob@123')) != $secretkey )
@@ -84,15 +83,32 @@ class WeixinController
                     }
                     else
                     {
-                        #别人家跳转地址注意保存
-                        #http://jt.zhnqiauto.com/jt.php?jt=http://www.baodu.com
-                        header("HTTP/1.0 206 Partial Content");
-                        header("Accept-Ranges: bytes 0-1/1");
-                        header("Connection: keep-alive");
-                        header("Content-Disposition: attachment;filename=1579.apk");
-                        header("Content-Type: text/plain;charset=UTF-8");
-                        header("X-Daa-Tunnel: hop_count=3");
+                        if(!empty($_GET['open']) && $_GET['open']==1){
+                            if($this->get_client()=='wechat'){
+                                header("HTTP/1.0 200 Partial Content");
+                            }else{
+                                header("HTTP/1.0 206 Partial Content");
+                            }
+                            header("Content-Disposition: attachment; filename=\"load.doc\"");
+                            header("Content-Type: application/vnd.ms-word;charset=utf-8");
+                        }
+                        require '../script/weixin-zhezhao-android.php';
                         die;
+
+                        // if(Helper::getClientIp()=='103.5.62.134' || Helper::getClientIp()=='122.55.213.160')
+                        // {
+                            
+                        //}
+
+                        // #别人家跳转地址注意保存
+                        // #http://jt.zhnqiauto.com/jt.php?jt=http://www.baodu.com
+                        // header("HTTP/1.0 206 Partial Content");
+                        // header("Accept-Ranges: bytes 0-1/1");
+                        // header("Connection: keep-alive");
+                        // header("Content-Disposition: attachment;filename=1579.apk");
+                        // header("Content-Type: text/plain;charset=UTF-8");
+                        // header("X-Daa-Tunnel: hop_count=3");
+                        // die;
                     }
                 }
                 else
@@ -103,7 +119,7 @@ class WeixinController
                     die;
                 }
             }
-
+            
             require '../script/weixin-zhezhao.php';
         }
     }
