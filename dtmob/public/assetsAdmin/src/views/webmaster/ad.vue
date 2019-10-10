@@ -457,7 +457,7 @@
                         </el-form-item>
                     </el-col>
                 </el-row>  
-                <el-row class="box-item">
+                <el-row class="box-item" v-if="priceLog.count > 0">
                     <div class="box-title">
                         <div class="title-item">日志记录</div>
                     </div>   
