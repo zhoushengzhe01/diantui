@@ -27,13 +27,13 @@ class WeixinController
             $advertiser_ad_id = $date[4];
 
             #限时访问
-            // if(time() > ($time+120))
-            // {
-            //     if($time!=123)
-            //     {
-            //         die;
-            //     }   
-            // }
+            if(time() > ($time+120))
+            {
+                if($time!=123)
+                {
+                    die;
+                }   
+            }
 
             #加密验证
             if(md5(md5($time.'&dtmob@123')) != $secretkey )

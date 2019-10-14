@@ -2,11 +2,13 @@
     <div class="content">
         <div class="title-box">
             <h3 class="title">添加素材</h3>
+            <div class="search-box">
+                <el-button type="success" @click="getPriceLogs" size="mini">修改日志</el-button>
+            </div>
         </div>
 
         <div class="box" v-loading="loading" style="padding: 24px;">
             <el-form ref="form" :model="data.webmasterad" label-width="80px" size="medium" style="max-width: 800px;" label-position="right">
-   
                 <el-form-item label="广告名称">
                     <el-input v-model="data.webmasterad.name"></el-input>
                 </el-form-item>
@@ -457,72 +459,158 @@
                         </el-form-item>
                     </el-col>
                 </el-row>  
-                <el-row class="box-item" v-if="priceLog.count > 0">
-                    <div class="box-title">
-                        <div class="title-item">日志记录</div>
-                    </div>   
-                    <div class="box" v-loading="logloading" style="max-width: 800px;" label-position="right">
-                        <el-table :data="priceLog.data" style="width: 100%">
-                            <el-table-column
-                                prop="username"
-                                label="用户名"
-                                min-width="100">
-                            </el-table-column>
-                            <el-table-column
-                                label="自动调节"
-                                min-width="100">
-                                <template slot-scope="scope">
-                                    <span v-if="scope.row.is_auto_price == 0">关闭</span>
-                                    <span v-if="scope.row.is_auto_price == 1">启动</span>
-                                </template>
-                            </el-table-column>
-                            <el-table-column
-                                prop="target_price"
-                                label="目标万IP"
-                                min-width="80">
-                            </el-table-column>
-                            <el-table-column
-                                prop="in_advertiser_price"
-                                label="广告计费"
-                                min-width="80">
-                            </el-table-column>
-                            <el-table-column
-                                prop="out_advertiser_price"
-                                label="站长计费"
-                                min-width="80">
-                            </el-table-column>
-                            <el-table-column
-                                prop="hid_height_chance"
-                                label="暗层计费"
-                                min-width="80">
-                            </el-table-column>
-                            <el-table-column
-                                prop="ip"
-                                label="IP地址"
-                                min-width="100">
-                            </el-table-column>                    
-                            <el-table-column
-                                prop="created_at"
-                                label="时间"
-                                min-width="160">
-                            </el-table-column>
-                        </el-table>
-                        <div class="page-box">
-                            <el-pagination
-                            @current-change="pageChange"
-                            layout="total, prev, pager, next"
-                            :page-size="logparamete.limit"
-                            :total="priceLog.count">
-                            </el-pagination>
-                        </div>
-                    </div>               
-                </el-row> 
                 <el-form-item>
                     <el-button type="success" @click="putWebmasterad">确定</el-button>
                     <el-button>取消</el-button>
                 </el-form-item>
             </el-form>
         </div>
+
+
+        <div class="title-box">
+            <h3 class="title">备注列表</h3>
+            <div class="search-box">
+                <el-button type="success" @click="noteshow = true" size="mini">添加备注</el-button>
+            </div>
+        </div>
+        <div class="box" v-loading="noteloading">
+
+            <el-table :data="notedata.notes" style="width: 100%">
+                <el-table-column
+                    label="备注人"
+                    min-width="100">
+                    <template slot-scope="scope">
+                        {{scope.row.username}}<br/>
+                        广告id：{{scope.row.webmaster_ad_id}}
+                    </template>
+                </el-table-column>
+
+                <el-table-column
+                    label="等级修改"
+                    min-width="100">
+                    <template slot-scope="scope">
+                        <span v-if="scope.row.grade>0">{{scope.row.grade}}级</span>
+                        <span v-if="scope.row.grade<=0">无修改</span>
+                    </template>
+                </el-table-column>
+
+                <el-table-column
+                    label="备注内容"
+                    min-width="700">
+                    <template slot-scope="scope">
+                        {{scope.row.note}}<br/>
+                        <span class="info" v-if="scope.row.webmaster_ad_id && scope.row.webmaster_ad_id!=data.webmasterad.id">
+                            计费:{{scope.row.in_advertiser_price}}/{{scope.row.out_advertiser_price}}
+                            调控:{{scope.row.is_auto_price}}/{{scope.row.target_price}}
+                            关闭:{{scope.row.false_close}}%
+                            高度:{{scope.row.hid_height}}/{{scope.row.hid_height_chance}}
+                            强跳:{{scope.row.compel_skip}}
+                        </span>
+                        <span class="success" v-if="scope.row.webmaster_ad_id && scope.row.webmaster_ad_id==data.webmasterad.id">
+                            计费:{{scope.row.in_advertiser_price}}/{{scope.row.out_advertiser_price}}
+                            调控:{{scope.row.is_auto_price}}/{{scope.row.target_price}}
+                            关闭:{{scope.row.false_close}}%
+                            高度:{{scope.row.hid_height}}/{{scope.row.hid_height_chance}}
+                            强跳:{{scope.row.compel_skip}}
+                        </span>
+                        &nbsp;
+                    </template>
+                </el-table-column>
+            
+                <el-table-column
+                    prop="created_at"
+                    label="时间"
+                    min-width="180">
+                </el-table-column>
+
+            </el-table>
+
+
+            <div class="page-box">
+                <el-pagination
+                @current-change="pageChange"
+                layout="total, prev, pager, next"
+                :page-size="noteparamete.limit"
+                :total="notedata.count">
+                </el-pagination>
+            </div>
+            
+            
+        </div>
+
+        <!--添加备注-->
+        <el-dialog title="添加备注" :visible.sync="noteshow" class="small_dialog">
+            <el-form ref="form" label-position="top" :model="noteitem" label-width="80px" size="small" v-loading="noteloading">
+                <el-form-item label="等级修改">
+                    <el-select v-model="noteitem.grade" style="width:100%">
+                        <el-option label="不修改" :value="0"></el-option>
+                        <el-option label="一级" :value="1"></el-option>
+                        <el-option label="二级" :value="2"></el-option>
+                        <el-option label="三级" :value="3"></el-option>
+                        <el-option label="四级" :value="4"></el-option>
+                        <el-option label="五级" :value="5"></el-option>
+                    </el-select>
+                </el-form-item>
+                <el-form-item label="备注内容">
+                    <el-input type="textarea" :rows="6" v-model="noteitem.note"></el-input>
+                </el-form-item>
+            </el-form>
+            <div slot="footer" class="dialog-footer">
+                <el-button @click="noteshow = false" size="small">取 消</el-button>
+                <el-button type="success" @click="postNode" size="small">确 定</el-button>
+            </div>
+        </el-dialog>
+
+
+        <!--修改日志-->
+        <el-dialog title="修改日志" :visible.sync="pricelogshow" class="small_dialog">
+            <el-table style="width: 100%" :data="pricelogdata.data" v-loading="pricelogloading">
+                <el-table-column
+                    label="操作人"
+                    min-width="80">
+                    <template slot-scope="scope">
+                        <span style="white-space: nowrap;">{{scope.row.username}}</span>
+                    </template>
+                </el-table-column>
+                <el-table-column
+                    label="自动调节">
+                    <template slot-scope="scope">
+                        <span v-if="scope.row.is_auto_price == 0">关闭</span>
+                        <span v-if="scope.row.is_auto_price == 1">启动</span>
+                        {{scope.row.target_price}}/万
+                    </template>
+                </el-table-column>
+                <el-table-column
+                    label="计费率">
+                    <template slot-scope="scope">
+                        {{scope.row.in_advertiser_price}}/{{scope.row.out_advertiser_price}}
+                    </template>
+                </el-table-column>
+                <el-table-column
+                    label="暗层计费">
+                    <template slot-scope="scope">
+                        {{scope.row.hid_height_chance}}/{{scope.row.hid_height_chance}}
+                    </template>
+                </el-table-column>
+                <el-table-column
+                    label="时间"
+                    min-width="120">
+                    <template slot-scope="scope">
+                        <span style="white-space: nowrap;" :title="scope.row.created_at">{{scope.row.created_at}}</span>
+                    </template>
+                </el-table-column>
+            </el-table>
+
+            <div class="page-box">
+                <el-pagination
+                @current-change="priceLogPageChange"
+                layout="total, prev, pager, next"
+                :page-size="pricelogparamete.limit"
+                :total="pricelogdata.count">
+                </el-pagination>
+            </div>
+        </el-dialog>
+
     </div>
 </template>
 <script>
@@ -536,19 +624,29 @@ export default {
             data: {
                 webmasterad: {}
             },
+            
+            pricelogshow: false,
+            pricelogloading: false,
+            pricelogparamete: {
+                offset: 0,
+                limit: 20,
+            },
+            pricelogdata: {},
 
-            logloading: false,
-            logparamete: {
+            noteloading: false,
+            noteparamete: {
                 offset: 0,
                 limit: 10,
             },
-            priceLog: {},
+            notedata: {},
+            noteitem: {'grade':0},
+            noteshow: false,
+
         };
     },
     created: function () {
         this.group.page = '/admin/webmaster/ads';
         this.getWebmasterad();
-        this.getAdPriceLog();
     },
     methods:{
         isShow: function(id,adtype)
@@ -567,8 +665,8 @@ export default {
             Th.$api.get('admin/webmaster/ad/'+Th.id+'.json', {}, function(data)
             {
                 Th.data = data;
-                
                 Th.loading = false;
+                Th.getNodes(Th.data.webmasterad.webmaster_id);
 
             }, function(type, message){ Th.loading = false; Th.$emit('message', type, message); });
         },
@@ -590,24 +688,51 @@ export default {
                     window.close();
 
                 }, 5000);
-
-                //Th.$router.push({path:'/admin/webmaster/ads'});
-
             }, function(type, message){ Th.loading = false; Th.$emit('message', type, message); });
         },
-        getAdPriceLog: function(){
-            var Th = this;
-            Th.logloading = true;
-            Th.$api.get('admin/webmaster/pricelogs/'+Th.id+'.json', Th.logparamete, function(data)
-            {
-                Th.priceLog = data;
-                Th.logloading = false;
 
-            }, function(type, message){ Th.logloading = false; Th.$emit('message', type, message); });
+        getNodes: function(id){
+            var Th = this;
+            Th.noteloading = true;
+            Th.$api.get('admin/webmaster/notes/'+id+'.json', Th.noteparamete, function(data)
+            {
+                Th.notedata = data;
+                Th.noteloading = false;
+
+            }, function(type, message){ Th.noteloading = false; Th.$emit('message', type, message); });
         },
         pageChange: function(val) {
-            this.logparamete.offset = parseInt(val-1) * parseInt(this.logparamete.limit);
-            this.getNodes();
+            this.noteparamete.offset = parseInt(val-1) * parseInt(this.noteparamete.limit);
+            this.getNodes(Th.data.webmasterad.webmaster_id);
+        },
+        postNode: function(){
+            var Th = this;
+            Th.noteitem.webmaster_ad_id = Th.id;
+            Th.$api.post('admin/webmaster/note/'+Th.data.webmasterad.webmaster_id+'.json', Th.noteitem, function(data)
+            {
+                Th.$emit('message', 'success', '备注成功');
+                Th.getNodes(Th.data.webmasterad.webmaster_id);
+                Th.noteshow = false;
+
+            }, function(type, message){ Th.noteshow = false; Th.$emit('message', type, message); });
+        },
+
+        //获取价格日志
+        getPriceLogs: function(){
+            var Th = this;
+            Th.pricelogloading = true;
+            Th.pricelogshow = true;
+            Th.$api.get('admin/webmaster/pricelogs/'+Th.id+'.json', Th.logparamete, function(data)
+            {
+                Th.pricelogdata = data;
+                Th.pricelogloading = false;
+
+            }, function(type, message){ Th.pricelogloading = false; Th.$emit('message', type, message); });
+
+        },
+        priceLogPageChange: function(val) {
+            this.pricelogparamete.offset = parseInt(val-1) * parseInt(this.pricelogparamete.limit);
+            this.getPriceLogs();
         },
     },
 }

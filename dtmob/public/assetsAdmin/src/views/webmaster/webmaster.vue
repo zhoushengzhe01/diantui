@@ -301,8 +301,6 @@
                 <el-button type="success" @click="putbank" size="small">确 定</el-button>
             </div>
         </el-dialog>
-
-
     </div>
 </template>
 <script>

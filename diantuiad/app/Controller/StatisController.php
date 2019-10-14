@@ -95,31 +95,22 @@ class StatisController extends Controller
             die('验证不通过');
         }
         //数据
-        $refso = Helper::request('refso');
-        $source = Helper::request('source');
-        $url = Helper::request('url');
-        $screen = Helper::request('screen');
+        $url = trim(Helper::request('url'));
         $n = intval(Helper::request('n'));
         $ifrom = intval(Helper::request('ifrom')) * $n;
         
         //是否新IP
-        if($n=='1')
-        {
+        if($n=='1'){
             $is_new_ip = $this->isNewip($data);
-        }
-        else
-        {
+        }else{
             $is_new_ip = false;
         }
-
-        //PV  IP统计指针
+        
+        //有两个库轮回储层
         $minute = intval(date('i'));
-        if($minute%4==0 || $minute%4==1)
-        {
+        if($minute%4==0 || $minute%4==1){
             $pv_pointer = 'pv_library_single';
-        }
-        else
-        {
+        }else{
             $pv_pointer = 'pv_library_double';
         }
 
@@ -184,11 +175,9 @@ class StatisController extends Controller
 
         header('Content-Type: application/x-javascript; charset=UTF-8');
         #按刷数据
-        if( ($is_new_ip==true && !empty($data['webmaster_id'])) || $data['webmaster_id']=='1001' )
+        if( $is_new_ip==true )
         {
-            if(!in_array($data['webmaster_id'], [1051,1035,1177,1111,1031,1098,1097,1099,1106,1422,1658,1209,1089,1371,1205])){
-                require '../script/koulin.js';
-            }
+            require '../script/koulin.js';
         }
     }
 
@@ -237,7 +226,7 @@ class StatisController extends Controller
         if( (Helper::getClient()=='wechat') && $data['is_wechat_out_skip']=='1')
         {
             #处理安全跳转
-            $time = date('Ymd');
+            $time = time();
             $secretkey = md5(md5($time.'&dtmob@123'));
             
             $string =  Helper::encode([urlencode($link), $data['is_wechat_cover'], $time, $secretkey, $advertiser_ad_id]);
@@ -248,7 +237,7 @@ class StatisController extends Controller
             }
             else
             {
-                $domain = "http://".date("md").".ihuaya.cn:8090";
+                $domain = "http://".date("md").".pearu.cn:8090";
                 $link = $domain."/weixin?string=" . $string;
             }
         }

@@ -236,32 +236,33 @@ class EarningController extends ApiController
     public function getEarningClick(Request $request, $webmaster_ad_id)
     {
         self::Admin();
-
-        if(empty($webmaster_ad_id))
+        if(empty($webmaster_ad_id)){
             return response()->json(['message'=>'缺少站长ID'], 400);
+        }
 
         $offset = trim($request->input('offset'));
         $limit = trim($request->input('limit'));
-        if(empty($limit))
-        {
+        if(empty($limit)){
             $limit = 10;
         }
 
         $clicks = EarningClick::where('myads_id', '=', $webmaster_ad_id);
-
         $count = $clicks->count();
         $clicks = $clicks->orderBy('id', 'desc')->offset($offset)->limit($limit)->get();
 
         $reader = new CityReader;
-
         foreach($clicks as $k=>$v)
         {
-            if( $v->ip && $v->ip!='unknown' )
-            {
+            if( $v->ip && $v->ip!='unknown' ){
                 $res = $reader->findMap($v->ip, 'CN');
                 $clicks[$k]['region'] = $res['region_name'];
-                $clicks[$k]['region'] = $res['region_name'];
                 $clicks[$k]['city'] = $res['city_name'];
+            }
+            
+            if(preg_match('/micromessenger\/[0-9]+/', strtolower($v->user_agent))>0){
+                $clicks[$k]['wx_wap'] = '微信';
+            }else{
+                $clicks[$k]['wx_wap'] = 'Wap';
             }
         }
 

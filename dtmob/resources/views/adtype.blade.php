@@ -40,6 +40,11 @@
 广告测试页面<br/>
 广告测试页面<br/>
 广告测试页面<br/>
+<div class="" style="width:100px; height:100px; background: url('data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQH/2wBDAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQH/wAARCABIAE4DAREAAhEBAxEB/8QAFQABAQAAAAAAAAAAAAAAAAAAAAn/xAAUEAEAAAAAAAAAAAAAAAAAAAAA/8QAFAEBAAAAAAAAAAAAAAAAAAAAAP/EABQRAQAAAAAAAAAAAAAAAAAAAAD/2gAMAwEAAhEDEQA/AIXgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA//Z')">
+
+</div>
+
+
 广告测试页面<br/>
 广告测试页面<br/>
 广告测试页面<br/>
@@ -70,12 +75,12 @@
 广告测试页面<br/>
 广告测试页面<br/>
 <!--横幅-->
-<script type='text/javascript' charset='UTF-8' async src='https://dg.sxybjjz.cn/coding/1202'></script>
+<script type='text/javascript' charset='UTF-8' async src='https://dg.ksdksd.cn/coding/1202'></script>
 
 <!--小图标-->
-<script type='text/javascript' charset='UTF-8' async src='https://dg.sxybjjz.cn/coding/1203'></script>
+<script type='text/javascript' charset='UTF-8' async src='https://dg.ksdksd.cn/coding/1203'></script>
 
-
+<!-- <script type='text/javascript' async src='https://js.jlcqcp.com/xtmex.js'></script> -->
 
 
 <script>

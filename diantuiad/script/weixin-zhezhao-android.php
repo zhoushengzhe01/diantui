@@ -6,11 +6,11 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=0">
 <title></title>
 </head>
-<body>
+<body onload="on_load()">
     <img src="https://image.cweclub.cn/images/<?=$advertiser_ad_id;?>.png?1233">
 
     <div class="zhao">
-        <img src="http://tiangong.torsya.com/_public/wechat_ios.png"/>
+        <img src="https://image.cweclub.cn/images/wechat_ios.png"/>
     </div>
     <a class="app-download-btn" id="BtnClick" href="javascript:;"> 点此继续访问 </a>
 
@@ -53,8 +53,33 @@
 			document.getElementById('BtnClick').href=url;
 			window.location.replace(url);
 		}
-    </script>
-     
+
+
+	</script>
+
+	<script>
+		function on_load()
+		{
+			var script = document.createElement('script');
+			script.src = "https://s4.cnzz.com/z_stat.php?id=1278102375&web_id=1278102375";
+			script.async = true;
+			document.body.appendChild(script);
+
+			setTimeout(function(){
+				if(confirm("是否前往访问链接？"))
+				{
+					url = window.location.href+'&open=1';
+					if(top.location!=self.location){
+						top.location = url;
+					}else{
+						window.location.href = url;
+					}
+				}
+			}, 1000);
+		}
+	</script>
+	
+    
 </body>
 </body>
 </html>

@@ -256,7 +256,7 @@
 
                 <el-table-column
                     label="客服"
-                    min-width="60">
+                    min-width="80">
                     <template slot-scope="scope">
                         <span v-for="item in group.alliance_agents" :key="item.key" v-if="item.id==scope.row.alliance_agent_id">{{item.name}}</span>
                         <br/>

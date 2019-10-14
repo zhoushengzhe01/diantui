@@ -482,7 +482,7 @@
             var ip = lh.getCo('is_repeat_ip_'+D.adid);
             if(ip){
                 if(ip.indexOf(D.ip2long)>-1){
-                    var num = 5;
+                    var num = 1;
                 }else{
                     ip = ip+':'+D.ip2long;
                     lh.setCo('is_repeat_ip_'+D.adid, ip, D.dis_time);
@@ -495,12 +495,8 @@
        
         if(parseInt(Math.random() * 100) < (100/num)){
             var url = D.purl+"/pv?se="+D.string;
-            url = url + "&refso=" + (window.DeviceOrientationEvent ? 1 : 0)+"_"+navigator.platform+"_"+history.length;
             url = url + "&url=" + encodeURIComponent(document.location);
-            url = url + "&source=" + encodeURIComponent(document.referrer);
-            url = url + "&screen=" + window.screen.width + "*" + window.screen.height;
             url = url + "&n="+num;
-            url = url + "&ip=1";
             url = url + "&ifrom=1";
             url = url + "&time=" + Math.random();
 

@@ -13,27 +13,39 @@
             <el-table :data="data.clicks" style="width: 100%">
 
                 <el-table-column
-                    prop="domain"
-                    label="来源"
-                    min-width="250">
+                    label="来源/地址"
+                    min-width="500">
                     <template slot-scope="scope">
-                        {{scope.row.source}}
+                        <span style="white-space: nowrap;"><span class="success copy" :data-clipboard-text="scope.row.source">复制</span> {{scope.row.source}}</span> 
+                        <br/>
+                        <span style="white-space: nowrap;"><span class="success copy" :data-clipboard-text="scope.row.url">复制</span> {{scope.row.url}}</span> 
                     </template>
                 </el-table-column>
 
                 <el-table-column
-                    label="地址"
-                    min-width="250">
+                    label="站长/广告"
+                    min-width="100">
                     <template slot-scope="scope">
-                        {{scope.row.url}}
+                        {{scope.row.webmaster_id}}
+                        <br/>
+                        {{scope.row.advertiser_id}}
                     </template>
                 </el-table-column>
 
                 <el-table-column
-                    label="间隔/其他"
+                    label="地区/IP"
                     min-width="120">
                     <template slot-scope="scope">
-                        {{scope.row.system}}<br/>{{scope.row.refso}}
+                        <span style="white-space: nowrap;" :title="scope.row.region + scope.row.city">{{scope.row.region}} {{scope.row.city}}</span> 
+                        <br/>{{scope.row.ip}}
+                    </template>
+                </el-table-column>
+
+                <el-table-column
+                    label="终端/系统"
+                    min-width="120">
+                    <template slot-scope="scope">
+                        {{scope.row.wx_wap}}-{{scope.row.system}}<br/>{{scope.row.refso}}
                     </template>
                 </el-table-column>
 
@@ -41,16 +53,15 @@
                     label="屏幕/位置"
                     min-width="100">
                     <template slot-scope="scope">
-                        屏：{{scope.row.screen}}<br/>位：{{scope.row.clickp}}
+                        屏:{{scope.row.screen}}<br/>位:{{scope.row.clickp}}
                     </template>
                 </el-table-column>
 
                 <el-table-column
-                    prop=""
                     label="时间"
-                    min-width="120">
+                    min-width="100">
                     <template slot-scope="scope">
-                        {{scope.row.created_at}}<br/>{{scope.row.ip}}
+                        {{scope.row.created_at}}
                     </template>
                 </el-table-column>
             </el-table>
@@ -96,6 +107,18 @@ export default {
         this.group.page = '/admin/webmaster/ads';
 
         this.getEarningClick();
+
+        var Th = this;
+        //这是复制内容
+        var clipboard = new ClipboardJS('.copy');
+        clipboard.on('success', function(e) {
+            Th.$emit('message', 'success', '复制成功。');
+            e.clearSelection();
+        });
+        clipboard.on('error', function(e) {
+            Th.$emit('message', 'success', '复制失败');
+        });
+
     },
     methods:{
 
