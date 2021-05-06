@@ -9,7 +9,7 @@
   },
   "dependencies": {
     "element-ui": "^2.2.2",
-    "highcharts": "^6.1.0",
+    "highcharts": "^9.0.0",
     "html5-history-api": "^4.2.10",
     "less": "^3.0.1",
     "less-loader": "^4.1.0",
